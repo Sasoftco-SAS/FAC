@@ -1,0 +1,31 @@
+.textoRojo {
+    background-color: #ff6961;
+}
+.textoAmarillo {
+    background-color: #ffda9e;
+}
+.textoNaranja {
+    background-color: #f9a59a;
+}
+.textoAzul {
+    background-color: #84b6f4;
+}
+.textoVerde {
+    background-color: #77dd77;
+}
+
+.container-tabla {
+    text-align:center;
+}
+
+.container-tabla th{
+    text-align:center;
+}
+
+.modal-body h4, mat-label {
+    color: #004884;
+    font-weight: 700;
+    letter-spacing: normal;
+    font-family: "Work Sans", sans-serif;
+    font-size: 24px;
+}
