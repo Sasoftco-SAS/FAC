@@ -51,6 +51,7 @@ export class NecesidadesTableComponent implements OnInit, AfterViewInit {
 
   id: string | null;
 
+  consecutivo: string;
   name: string;
   descripcion: string;
   porque: string;
@@ -76,6 +77,7 @@ export class NecesidadesTableComponent implements OnInit, AfterViewInit {
 
   public displayedColumns2: string[] = [
     "selectedValue",
+    "consecutivo",
     "name",
     "programa",
     "subprograma",

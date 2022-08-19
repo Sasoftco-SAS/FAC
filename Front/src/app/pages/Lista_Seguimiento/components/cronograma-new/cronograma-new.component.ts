@@ -185,7 +185,7 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
 
           this.semaforo_cronograma = 1;
         });
-    } else {
+    } else { // Acá obtiene cronogramas entre 0 y 75 de avance, así como no protegidos.
       this.cronogramaService
         .getAll() //Se obtienen todos los cronogramas existentes
         .subscribe((response) => {
@@ -198,42 +198,58 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
             [val]: obj[val]
           }), {});
 
-          const filterObject2 = (obj, filter, filterValue) => Object.keys(obj).reduce((acc, val) => (obj[val][filter] === filterValue ? acc : {
-            ...acc,
-            [val]: obj[val]
-          }), {});
-
           //console.log("Antes del For: ", this.listaCronogramas)
 
           for (let q of this.listaCronogramas) {
             for (let i of q.actividades) {
               const aux = filterObject(i.subActividad, "protegido", true);
+              // console.log("TypeAux1: ",typeof(aux))
+              // console.log("aux", aux);
+              // console.log("////////");
               i.subActividad = Object.values(aux); //Esto debido a la forma en que termina el objeto en 'aux'
             }
           }
+          //console.log("/// FINAL DE FILTRO PROTEGIDO ///");
+          for (let i of this.listaCronogramas) {
+            for (let k of i.actividades) {
+              //let nombre_subAux = '';
+              let xd = -1;
+              for (let j of k.subActividad) {
+                xd++;
+                // console.log("Entra a FOR");
+                // console.log("FOR - SubAct[",xd,"] nombreSub: ",j.nombreSub);
+                if ( (this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString())) > 76 ) {
+                  // console.log("Entra al if");
+                  // console.log("SubAct[",xd,"] nombreSub: ",j.nombreSub);
+                  // console.log("Se elimina");
+                  k.subActividad.splice(xd,1);
+                  // console.log("Nuevo subAct: [",xd,"] nombreSub: ", k.subActividad[xd].nombreSub); //No elimina la segunda subact, se salta de subact
+                  // console.log("Length: ",k.subActividad.length);
 
-          for (let z of this.listaCronogramas) {
-            for (let d of z.actividades) {
-              for (let j of d.subActividad) {
-                if ( this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString()) < 76 ) {
-                  console.log(typeof(j.nombreSub))
-                  const aux2 = filterObject2(j, typeof("nombreSub"), 'string');
-                  j = Object.values(aux2);
-                  console.log(j); //ESTA IMPRIMIENDO BIEN
+                  while (k.subActividad[xd]) {
+                    if ( (this.calculateAdvance(k.subActividad[xd].fechaInicio.toString(), k.subActividad[xd].fechaFinal.toString())) > 76 ) {
+                      k.subActividad.splice(xd,1);
+                    }else{
+                      xd++;
+                    }
+                  }
+
+                  console.log("Finaliza IF");
+
+                  // if(k.subActividad[xd]){
+                  //   console.log("-Se reinicia contador-")
+                  //   xd = -1;
+                  //   console.log("Contador: ", xd)
+                  // }
+
                 }
               }
             }
           }
-          //  for (let j of i.subActividad) {
-          //    if ( this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString()) >= 76 ) {
-          //     //console.log("Menor a 75: ", j.nombreSub)
-          //     const aux2 = filterObject2(j, (this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString())), 76);
-          //     //console.log(aux2)
-          //     j = Object.values(aux2); //Esto debido a la forma en que termina el objeto en 'aux'
-          //    }
-          //  }
-
-          //console.log("Typeof: ", typeof(this.listaCronogramas))
+          console.log(" xx ", (this.listaCronogramas))
+          //console.log("Typeof 0: ", typeof(this.listaCronogramas[0].actividades[0].subActividad))
+          //console.log("Lista 0: ", this.listaCronogramas[0].actividades[0].subActividad)
+          console.log("LENGTH: ", this.listaCronogramas[6].actividades[0].subActividad.length)
 
           //console.log("Entra: ",(element.actividades[0].nombreAct));
           //this.getProject(element.proyectId);

@@ -132,20 +132,19 @@
                     <ng-container *ngFor="let cronograma of listaCronogramas">
                         <ng-container *ngFor="let cronogramaAux of cronograma.actividades">
                             <ng-container *ngFor="let sub of cronogramaAux.subActividad; let i = index">
-                                <tr>
-                                    <!-- ACA ESTA EL ERROR *ngIf="(calculateAdvance(sub.fechaInicio.toString(), sub.fechaFinal.toString()) <= 75)" ***********-->
+                                <tr *ngIf="cronogramaAux.subActividad.length > 0">
                                     <td *ngIf="i==0"
                                         [attr.rowspan]="cronogramaAux.subActividad.length">
                                         <b>{{ cronogramaAux.nombreAct}}</b>
-                                    </td>
-                                    <td>{{ sub.nombreSub }}</td>
-                                    <td>{{ sub.fechaInicio | date: 'shortDate' }}</td>
-                                    <td>{{ sub.fechaFinal | date: 'shortDate' }}</td>
-                                    <td>
+                                    </td>  <!-- Hallar la manera de que este td no aparezca -->
+                                    <td *ngIf="sub">{{ sub.nombreSub }}</td>
+                                    <td  *ngIf="sub">{{ sub.fechaInicio | date: 'shortDate' }}</td>
+                                    <td  *ngIf="sub">{{ sub.fechaFinal | date: 'shortDate' }}</td>
+                                    <td  *ngIf="sub">
                                         <label *ngIf="sub.fechaReal">{{sub.fechaReal | date: 'shortDate'}}</label>
                                         <label *ngIf="!sub.fechaReal">{{NO_REAL_DATE}}</label>
                                     </td>
-                                    <td>
+                                    <td  *ngIf="sub">
                                         <ng-container *ngIf="sub.fechaReal">
                                             <label
                                                     *ngIf="calculateGap(sub.fechaFinal.toString(), sub.fechaReal.toString()) > 0"
@@ -167,7 +166,7 @@
                                             <label>{{NO_REAL_DATE}}</label>
                                         </ng-container>
                                     </td>
-                                    <td>
+                                    <td  *ngIf="sub">
                                         <ng-container
                                                 *ngIf="calculateAdvance(sub.fechaInicio.toString(), sub.fechaFinal.toString()) === 0">
                                             <div class="advance-badge-0">Sin avance</div>
@@ -193,7 +192,7 @@
                                             </div>
                                         </ng-container>
                                     </td>
-                                    <td [attr.id]="cronograma.proyectId">
+                                    <td [attr.id]="cronograma.proyectId"  *ngIf="sub">
                                         <button
                                                 *ngIf="sesion_rol=='Sub-Director' && this.semaforo_cronograma == 2"
                                                 mat-icon-button
