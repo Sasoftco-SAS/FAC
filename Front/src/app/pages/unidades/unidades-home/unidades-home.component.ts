@@ -7,6 +7,7 @@ import { finalize, map, startWith, debounceTime } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { UnidadService } from '../../../shared/services/unidad-service/unidad.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-unidades-home',
@@ -57,6 +58,12 @@ export class UnidadesHomeComponent implements OnInit {
       if(this.name === unidad.name){
         condicion = false;
         console.log('El nombre de la unidad ya existe')
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Algo ha salido mal!',
+          footer: '<a href="">El nombre de la Unidad ya existe</a>'
+        })
       }
     });
 
