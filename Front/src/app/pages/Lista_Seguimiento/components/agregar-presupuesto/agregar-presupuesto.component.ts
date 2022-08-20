@@ -8,11 +8,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 })
 export class AgregarPresupuestoComponent {
 
-  public SUB_TITLE = 'Ingrese el presupuesto ejecutado para ';
-  public SAVE_DATE = 'Actualizar presupuesto';
-  public MAX = 'Monto máximo: ';
-  public CANCEL = 'Cancelar';
-  public ERROR_LABEL = 'Por favor ingresar un documento con formato PDF';
   public presupuesto = 0;
   public formatError = false;
   public fileToUpload;

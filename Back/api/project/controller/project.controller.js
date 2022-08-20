@@ -177,7 +177,7 @@ async function removeRubro(req, res, next) {
 }
 
 /**
- * Método para actualizar un rubro de un proyecto
+ * Método para crear un rubro de un proyecto
  * @param req
  * @param res
  * @param next
@@ -186,6 +186,7 @@ async function updateRubro(req, res, next) {
     try {
         const project = req.body;
         const ProjectObject = JSON.parse(JSON.stringify(project));
+        //console.log("ProjectObject /////// ", req.body);
         const {ProjectId, rubro, idRubro} = ProjectObject;
         const {file} = req.files;
         const factura = {
@@ -196,10 +197,7 @@ async function updateRubro(req, res, next) {
 
           //CREAMOS EL CONSECUTIVO
         const projectObj = await ProyectoDao.findOne({_id: ProjectId})
-        // if((projectObj.AgregarDetallesRubros[0].NombreRubro)=="Adquisición de equipos"){
-        //     const rubrosLength = ((projectObj.AgregarDetallesRubros[0].listaRubros).length)
-        //     const consecutivo = ((projectObj.iniciarProyecto[0].centroDeInvestigacion).substr(0,3)+"_")+(rubrosLength+1) //Crea consecutivo obteniendo primeros 3 digitos y añade número
-        // }
+
         //console.log("///////////////////////////////////////////////")
         //console.log(projectObj.AgregarDetallesRubros[0].NombreRubro)
         //console.log(projectObj)
@@ -215,9 +213,9 @@ async function updateRubro(req, res, next) {
                 //console.log(rubroActual)
                 const rubrosLength = ((rubroActual.listaRubros).length)
                 const consecutivo = ((projectObj.iniciarProyecto[0].centroDeInvestigacion).substr(0,3)+"_")+(rubrosLength+1)
-                rubroActual.listaRubros.push({rubro, factura, consecutivo}) //Consecutivo
+                rubroActual.listaRubros.push({rubro, factura, consecutivo}) //CREA EL GASTO Y LE AÑADE CONSECUTIVO
             }else if ((String(rubroActual._id) === idRubro) && ( (rubroActual.NombreRubro) != "Adquisición de equipos" )){
-                rubroActual.listaRubros.push({rubro, factura})
+                rubroActual.listaRubros.push({rubro, factura}) //CREA EL GASTO SIN CONSECUTIVO PORQUE NO ES ADQUISICION
             }
         })
 
@@ -241,6 +239,106 @@ async function updateRubro(req, res, next) {
     }
 }
 
+/**
+ * Método para actualizar un rubro de un proyecto
+ * @param req
+ * @param res
+ * @param next
+ */
+ async function patchRubro(req, res, next) {
+    try {
+        const project = req.body;
+        const ProjectObject = JSON.parse(JSON.stringify(project));
+        //console.log("ProjectObject /////// ", req.body);
+        const {ProjectId, rubro, idRubro, consecutivo} = ProjectObject;
+        const {file} = req.files;
+        const factura = {
+            name: file.name,
+            data: file.data,
+            path: '/img/uploads/' + file.name
+        }
+
+        // if (!necesidad.name) {
+        //     delete necesidad.name;
+        // }
+
+        //console.log("ProjectId ",ProjectId);    //ProjectId
+        //console.log("idRubro ",idRubro);    //RubroId
+        //console.log("factura ",factura);    //Factura
+        //console.log("rubro ",rubro);    //Monto
+        //console.log("Consecutivo ",consecutivo);    //Consecutivo es 'undefined' para los otros rubros
+
+        //CREAMOS EL CONSECUTIVO
+        const projectObj = await ProyectoDao.findOne({_id: ProjectId})
+        //console.log(projectObj);
+        if(consecutivo!='undefined'){
+            //console.log("Distinto: ", consecutivo);
+            projectObj.AgregarDetallesRubros[0].listaRubros.map(rubroActual => {
+                if ( (String(rubroActual._id) === idRubro) ) {//Encontramos el rubro que vamos a editar
+                    //console.log(rubroActual.rubro);
+                    rubroActual.rubro = rubro;
+                    rubroActual.factura = factura;
+                    rubroActual.consecutivo = consecutivo;
+
+                    ProyectoDao['update'](ProjectId, projectObj)
+                        .then(async _Proyecto => {
+                            if (!_Proyecto) {
+                                res.status(404).json({message: 'Proyecto not found.'});
+                            } else {
+                                res.status(200).json({"Proyecto": _Proyecto});
+                            }
+                        }).catch(err => res.status(500).json({message: err}));
+                }
+            });
+        }else{
+            //console.log("Es undefined: ", consecutivo);
+            projectObj.AgregarDetallesRubros[0].listaRubros.map(rubroActual => {
+                if ( (String(rubroActual._id) === idRubro) ) {//Encontramos el rubro que vamos a editar
+                    //console.log(rubroActual.rubro);
+                    rubroActual.rubro = rubro;
+                    rubroActual.factura = factura;
+                    //console.log("Nuevo monto: ", rubroActual.rubro, "Nueva factura: ", rubroActual.factura);
+                    ProyectoDao['update'](ProjectId, projectObj)
+                        .then(async _Proyecto => {
+                            if (!_Proyecto) {
+                                res.status(404).json({message: 'Proyecto not found.'});
+                            } else {
+                                res.status(200).json({"Proyecto": _Proyecto});
+                            }
+                        }).catch(err => res.status(500).json({message: err}));
+                }
+            });
+        }
+        // projectObj.AgregarDetallesRubros.map(rubroActual => {
+        //     if ((String(rubroActual._id) === idRubro) && ( (rubroActual.NombreRubro) == "Adquisición de equipos" )) {
+        //         //console.log(rubroActual)
+        //         const rubrosLength = ((rubroActual.listaRubros).length)
+        //         const consecutivo = ((projectObj.iniciarProyecto[0].centroDeInvestigacion).substr(0,3)+"_")+(rubrosLength+1)
+        //         rubroActual.listaRubros.push({rubro, factura, consecutivo}) //CREA EL GASTO Y LE AÑADE CONSECUTIVO
+        //     }else if ((String(rubroActual._id) === idRubro) && ( (rubroActual.NombreRubro) != "Adquisición de equipos" )){
+        //         rubroActual.listaRubros.push({rubro, factura}) //CREA EL GASTO SIN CONSECUTIVO PORQUE NO ES ADQUISICION
+        //     }
+        // })
+
+        // ProyectoDao['update'](ProjectId, projectObj) //DESCOMENTAR**********************
+        //     .then(async _Proyecto => {
+        //         if (!_Proyecto) {
+        //             res.status(404).json({message: 'Proyecto not found.'});
+        //         } else {
+        //             res.status(200).json({"Proyecto": _Proyecto});
+        //         }
+        //     }).catch(err => res.status(500).json({message: err}));
+
+    } catch (err) {
+        const errorFormatter = ({msg, param}) => {
+            return `The value: ${param} ${msg}`;
+        };
+        const result = validationResult(req).formatWith(errorFormatter);
+        if (!result.isEmpty()) {
+            return res.status(422).json({errors: result.array()});
+        }
+    }
+}
 
 function getIdConv(req, res) {
     let query = req.params.id;
@@ -294,6 +392,7 @@ module.exports = {
     update,
     updateRubro,
     removeRubro,
+    patchRubro,
     remove,
 };
 

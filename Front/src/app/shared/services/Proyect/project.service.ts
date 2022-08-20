@@ -71,6 +71,17 @@ export class ProjectService {
         return this.http.postFirma(`${this.endpointRubro}/${ProjectId}`, formData);
     }
 
+    public patchRubro(ProjectId, id, rubro, factura, consecutivorubro): Observable<any> {
+        const formData = new FormData();
+        formData.append('ProjectId', ProjectId);
+        formData.append('file', factura);
+        formData.append('rubro', rubro);
+        formData.append('idRubro', id);
+        formData.append('consecutivo', consecutivorubro);
+        //console.log("Se envia IDRUBRO: ", id);
+        return this.http.patch(`${this.endpointRubro}/${ProjectId}`, formData, null, true);
+    }
+
     public removeRubroPDF(ProjectId, idDetalleRubro, idRubro): Observable<any> {
         return this.http.delete(`${this.endpointRubro}`, {body: {ProjectId, idDetalleRubro, idRubro}}, );
     }

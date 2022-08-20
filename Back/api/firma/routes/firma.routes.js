@@ -19,4 +19,6 @@ api.post(`${endpoint}`, FirmaController.create);
 api.post(`${endpointRubro}/:id`, ProyectController.updateRubro);
 api.delete(`${endpointRubro}`, ProyectController.removeRubro);
 
+api.patch(`${endpointRubro}/:id`, ProyectController.patchRubro);
+
 module.exports = api;

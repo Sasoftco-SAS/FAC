@@ -23,6 +23,7 @@ export class SeguimientoRubroComponent implements OnInit {
     public TIPO_DE_RUBRO = 'Tipo de rubro';
     public ADD_PRESUPUESTO = 'Agregar presupuesto ejecutado';
     public project;
+    public editarRubroCostoMax = 0;
 
     constructor(
         private rutaActiva: ActivatedRoute,
@@ -72,7 +73,8 @@ export class SeguimientoRubroComponent implements OnInit {
 
     public setPresupuesto(name: string, id: string, costoTotal: number, rubro): void {
         const maxLimit = costoTotal - this.getPresupuestoEjecutado(rubro);
-        this.dialog.open(AgregarPresupuestoComponent, {data: {name, id, maxLimit}})
+
+        this.dialog.open(AgregarPresupuestoComponent, {data: {name, id, maxLimit}}) //maxlimit es el monto maximo que puede gastar
             .afterClosed()
             .subscribe(presupuestoResponse => {
                 if (presupuestoResponse.presupuesto && presupuestoResponse.factura) {
@@ -81,18 +83,21 @@ export class SeguimientoRubroComponent implements OnInit {
             });
     }
 
-    public viewDocuments(rubroId: string): void {
+    public viewDocuments(rubroId: string, name: string, costoTotal: number, rubro): void {
+        const maxLimit = costoTotal - this.getPresupuestoEjecutado(rubro);
+        this.editarRubroCostoMax = maxLimit;
         const selectedRubro = this.listaDeRubros.find(rubro => rubro._id === rubroId);
         if (!selectedRubro) {
             return;
         }
-
-        this.dialog
-            .open(ModalViewDocumentsRubroComponent, {data: {
+//Le envía al modal de ver gastos los siguientes datos empaquetados en {data}
+        this.dialog.open(ModalViewDocumentsRubroComponent, {data:
+            {
                 rubros: selectedRubro.listaRubros,
                 name: selectedRubro.NombreRubro,
                 projectId: this.rutaActiva.snapshot.params.id,
-                rubroDetalleId: rubroId
+                rubroDetalleId: rubroId,
+                maxmonto: this.editarRubroCostoMax //Enviamos maxmonto para poder usarlo en el modal de editar
             }})
             .afterClosed()
             .subscribe(() => {

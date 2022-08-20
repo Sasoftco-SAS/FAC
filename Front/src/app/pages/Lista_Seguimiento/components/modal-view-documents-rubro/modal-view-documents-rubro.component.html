@@ -1,16 +1,60 @@
+<!--INICIA ESPACIO PARA DEFINIR MODAL EDITAR NECESIDAD-->
+<ng-template #contenido let-modal>
+    <div class="modal-body">
+        <form class="mt-3" [formGroup]="formNecesidad" (ngSubmit)="metodoEditarRubro()">
+            <h1 class="text-center"><strong>Modificar gasto</strong></h1>
+
+            <!-- CARGAR MONTO -->
+            <div class="form-group">
+                <label>Ingrese el nuevo presupuesto ejecutado para <b>{{data.name}}</b></label>
+                <br>
+                <label>Monto máximo actual:  <b>{{(data.maxmonto+montoaEditar) | currency}}</b></label>
+                <br>
+                <mat-form-field appearance="fill">
+                    <label for="factura">Monto (No superior al monto máximo actual) (<strong style="color: red;">*</strong>)</label>
+                    <input formControlName="presupuesto" class="form-control form-control-lg"
+                    type="number" maxlength="2" matInput>
+                </mat-form-field>
+            </div>
+            <!-- CARGAR FACTURA -->
+            <div class="form-group">
+                <label for="factura">Factura (PDF) (<strong style="color: red;">*</strong>)</label>
+                <input formControlName="factura" id="file" type="file" class="form-control" (change)="onFileChange($event.target.files)">
+                <br>
+                <label style="color: red;" *ngIf="formatError">Factura requerida y en <strong>PDF</strong></label>
+            </div>
+            <!-- BOTONES -->
+            <div class="mb-3">
+                <br>
+                <a
+                    (click)="metodoEditarRubro()"
+                    (click)="modal.close()">
+                    <button data-dismiss="modal" type="submit" class="btn btn-success btn-lg float-start">Aceptar</button>
+                </a>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="modal.close()">Cancelar</button>
+    </div>
+</ng-template>
+<!--MODAL TERMINADO-->
+
 <div class="modal-rubros-documentos-dashboard">
     <div class="modal-rubros-documentos-dashboard__title">
         <label>{{TITLE}}</label>
         <label>Rubro: {{data.name}}</label>
     </div>
-    <table class="modal-rubros-documentos-dashboard__table">
+    <table class="modal-rubros-documentos-dashboard__table center">
         <thead>
         <tr>
             <td *ngIf="data.name == 'Adquisición de equipos'">Consecutivo</td>
             <td *ngIf="data.name != 'Adquisición de equipos'"></td>
             <td>{{AMOUNT}}</td>
             <td>{{VIEW_PDF}}</td>
-            <td>{{REMOVE}}</td>
+            <!-- <td>Eliminar presupuesto</td> -->
+            <td>Editar presupuesto</td>
         </tr>
         </thead>
         <tbody>
@@ -19,7 +63,7 @@
             <td>{{rubro.rubro | currency}}</td>
             <td>
                 <div class='square-orange-icon icon-click-pdf'>
-                    <span
+                    <span   align="center"
                             class="material-icons"
                             matTooltip="Ver documentos"
                             (click)="downloadPDF(rubro.factura)"
@@ -28,14 +72,28 @@
                     </span>
                 </div>
             </td>
-            <td>
-                <div class='square-red-icon icon-click-pdf'>
+            <!-- <td>
+                <div class='square-red-icon acciones'>
                     <span
                             class="material-icons"
                             matTooltip="Eliminar rubro"
                             (click)="removeRubro(rubro._id)"
                     >
-                        delete
+                    <mat-icon>delete</mat-icon>
+                    </span>
+                </div>
+            </td> -->
+            <td>
+                <div class='icon-click-pdf acciones'>
+                    <span align="center"
+                        class="material-icons"
+                        mat-icon-button
+                        matTooltipClass="tooltip-white"
+                        matTooltip="Editar rubro"
+                        (click)="modal.open(contenido)"
+                        (click)="openModalEdit(rubro._id, rubro.rubro, rubro.consecutivo)"
+                    >
+                    <mat-icon>edit</mat-icon>
                     </span>
                 </div>
             </td>
