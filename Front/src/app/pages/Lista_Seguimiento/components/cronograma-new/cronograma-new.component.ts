@@ -13,6 +13,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { PropiedadintService } from "src/app/shared/services/propiedadint-service/propiedadint.service";
 import { UpdateNececidadesTableServiceService } from "src/app/shared/services/general/update-nececidades-table-service.service";
 import { Router } from "@angular/router";
+import { forkJoin } from "rxjs";
 
 @Component({
   selector: "app-cronograma-new",
@@ -41,7 +42,6 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
   public PROJECT_NAME = ". . .";
 
   public semaforo_cronograma = 0;
-  public LISTA_NOMBRESPR = [];
   public sesion_rol = localStorage.getItem("Role"); //Traemos el rol logeado
   public proyecto_propiedadint = [];
   public SubActmodal = "";
@@ -51,6 +51,7 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
   public subact = "";
   public cronogramaParaActualizar;
   public nombreActividad = "";
+  public nombresProyectos = {}; //obj vacio
 
   constructor(
     private cronogramaService: cronogramaService,
@@ -171,8 +172,12 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
     //console.log("DatoFinal",this.proyecto_propiedadint);
   }
 
+  getProjectName(id: string){
+    return this.nombresProyectos[id];
+  }
+
   private getAll(): void {
-    //Obtener los proyectos del proyecto actualmente cliqueado
+    //Obtener los cronogramas del proyecto actualmente cliqueado
     const projectId = this.rutaActiva.snapshot.params.id;
     if (projectId) {
       this.cronogramaService
@@ -198,8 +203,6 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
             [val]: obj[val]
           }), {});
 
-          //console.log("Antes del For: ", this.listaCronogramas)
-
           for (let q of this.listaCronogramas) {
             for (let i of q.actividades) {
               const aux = filterObject(i.subActividad, "protegido", true);
@@ -212,20 +215,11 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
           //console.log("/// FINAL DE FILTRO PROTEGIDO ///");
           for (let i of this.listaCronogramas) {
             for (let k of i.actividades) {
-              //let nombre_subAux = '';
               let xd = -1;
               for (let j of k.subActividad) {
                 xd++;
-                // console.log("Entra a FOR");
-                // console.log("FOR - SubAct[",xd,"] nombreSub: ",j.nombreSub);
                 if ( (this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString())) > 76 ) {
-                  // console.log("Entra al if");
-                  // console.log("SubAct[",xd,"] nombreSub: ",j.nombreSub);
-                  // console.log("Se elimina");
                   k.subActividad.splice(xd,1);
-                  // console.log("Nuevo subAct: [",xd,"] nombreSub: ", k.subActividad[xd].nombreSub); //No elimina la segunda subact, se salta de subact
-                  // console.log("Length: ",k.subActividad.length);
-
                   while (k.subActividad[xd]) {
                     if ( (this.calculateAdvance(k.subActividad[xd].fechaInicio.toString(), k.subActividad[xd].fechaFinal.toString())) > 76 ) {
                       k.subActividad.splice(xd,1);
@@ -233,52 +227,29 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
                       xd++;
                     }
                   }
-
-                  console.log("Finaliza IF");
-
-                  // if(k.subActividad[xd]){
-                  //   console.log("-Se reinicia contador-")
-                  //   xd = -1;
-                  //   console.log("Contador: ", xd)
-                  // }
-
                 }
               }
             }
           }
-          console.log(" xx ", (this.listaCronogramas))
-          //console.log("Typeof 0: ", typeof(this.listaCronogramas[0].actividades[0].subActividad))
-          //console.log("Lista 0: ", this.listaCronogramas[0].actividades[0].subActividad)
-          console.log("LENGTH: ", this.listaCronogramas[6].actividades[0].subActividad.length)
 
-          //console.log("Entra: ",(element.actividades[0].nombreAct));
-          //this.getProject(element.proyectId);
-          //console.log(this.LISTA_NOMBRESPR);//Imprime todo lleno ya
+          const observerCronogramas = this.listaCronogramas.map(cronograma => this.projectService.getById(cronograma.proyectId))
+          forkJoin(observerCronogramas).subscribe(response=>{
+            response.forEach((item : any) => {
+              this.nombresProyectos[item.Proyecto._id] = item.Proyecto.iniciarProyecto[0].nombreProyecto;
+            })
+            console.log(this.nombresProyectos);
+          })
 
-          // for (let i = 0; i < this.listaCronogramas.length; i++) {
-          //     this.listaCronogramas[i].push(this.LISTA_NOMBRESPR[i]);
-          // }
+          //MI PROBLEMA ES QUE NO SÉ CUÁNDO SE TERMINA DE LLENAR LISTA_NOMBRESPR *************
+          //console.log("Lista despues de primer For:",JSON.parse( JSON.stringify(this.LISTA_NOMBRESPR) )) //No existe aún
 
-          //console.log("Cronogramas: ",this.listaCronogramas);
-          //console.log(this.LISTA_NOMBRESPR);
-          //console.log("semaforo: ",this.semaforo_cronograma)
-          //Crear una variable [] que guarde los nombres de los proyectos y aca debemos llamar al metodo getProject y editarlo para que guarde
-
-        }); //O crear un nuevo getproject que no reciba id sino que sea void y llame todos los nombres de proyectos
-    } //Ver si puedo editar listacronogramas y añadir el nombre del proyecto con getproject
+        });
+    }
   }
 
   private getProject(projectId): void {
     //console.log("Project Name2: ",this.PROJECT_NAME); //arroja 'a'
     if (this.PROJECT_NAME != ". . .") {
-      this.projectService.getById(projectId).subscribe((project) => {
-        //console.log('Se añade: ',(project.Proyecto.iniciarProyecto[0].nombreProyecto))
-        this.LISTA_NOMBRESPR.push(
-          project.Proyecto.iniciarProyecto[0].nombreProyecto
-        );
-        //this.listaCronogramas.push(project.Proyecto.iniciarProyecto[0].nombreProyecto),projectId;
-        //VER SI PUEDO AGREGAR TAMBIEN EL PROYECTID CON ESE NOMBRE DE PROYECTO
-      });
     } else {
       this.projectService.getById(projectId).subscribe((project) => {
         this.PROJECT_NAME = project.Proyecto.iniciarProyecto[0].nombreProyecto;
