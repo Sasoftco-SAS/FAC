@@ -237,11 +237,11 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
             response.forEach((item : any) => {
               this.nombresProyectos[item.Proyecto._id] = item.Proyecto.iniciarProyecto[0].nombreProyecto;
             })
-            console.log(this.nombresProyectos);
+            //console.log(this.nombresProyectos);
           })
 
           //MI PROBLEMA ES QUE NO SÉ CUÁNDO SE TERMINA DE LLENAR LISTA_NOMBRESPR *************
-          //console.log("Lista despues de primer For:",JSON.parse( JSON.stringify(this.LISTA_NOMBRESPR) )) //No existe aún
+          console.log("Cronogramas:",JSON.parse( JSON.stringify(this.listaCronogramas) ))
 
         });
     }

@@ -134,13 +134,13 @@
                         <ng-container *ngFor="let cronogramaAux of cronograma.actividades">
                             <ng-container *ngFor="let sub of cronogramaAux.subActividad; let i = index">
                                 <tr *ngIf="cronogramaAux.subActividad.length > 0">
-                                    <td *ngIf="(semaforo_cronograma == 2)">
+                                    <td *ngIf="(semaforo_cronograma == 2)" [attr.rowspan]="1"> <!-- cronogramaAux.length -->
                                         <b>{{getProjectName(cronograma.proyectId)}}</b>
                                     </td>
-                                    <td *ngIf="i==0"
+                                    <td *ngIf="i===0"
                                         [attr.rowspan]="cronogramaAux.subActividad.length">
                                         <b>{{cronogramaAux.nombreAct}}</b>
-                                    </td>  <!-- Hallar la manera de que este td no aparezca -->
+                                    </td>
                                     <td *ngIf="sub">{{ sub.nombreSub }}</td>
                                     <td  *ngIf="sub">{{ sub.fechaInicio | date: 'shortDate' }}</td>
                                     <td  *ngIf="sub">{{ sub.fechaFinal | date: 'shortDate' }}</td>
