@@ -1,4 +1,5 @@
-# Welcome to your organization's demo respository
-This code repository (or "repo") is designed to demonstrate the best GitHub has to offer with the least amount of noise.
+# Repositorio para la Plataforma de Innovación Abierta de la FAC
 
-The repo includes an `index.html` file (so it can render a web page), two GitHub Actions workflows, and a CSS stylesheet dependency.
+En este repositorio se actualizará el código de la Plataforma de la FAC en relación con lo indicado en el Contrato 098 de 2022.
+
+
