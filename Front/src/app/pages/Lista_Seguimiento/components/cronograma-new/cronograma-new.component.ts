@@ -14,6 +14,7 @@ import { PropiedadintService } from "src/app/shared/services/propiedadint-servic
 import { UpdateNececidadesTableServiceService } from "src/app/shared/services/general/update-nececidades-table-service.service";
 import { Router } from "@angular/router";
 import { forkJoin } from "rxjs";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-cronograma-new",
@@ -95,6 +96,7 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
           this.cronogramaParaActualizar = response.cronograma;
           //console.log("Imprimiendo CRONOGRAMA Subscribe", this.cronogramaParaActualizar.cronograma) //Cronograma
           this.actualizarEstadoSubactividad();
+          Swal.fire('Protegido con éxito')
         });
 
       this.propiedadintService
@@ -105,11 +107,6 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
           descripcionProteccion,
           this.nombreActividad
         )
-        .pipe(
-          finalize(() =>
-            this.updateNececidadesTableServiceService.updateTable()
-          )
-        ) //refrescar tabla
         .subscribe(
           (data) => {},
           (error) => {
