@@ -5,6 +5,8 @@ import {Roles} from '../@core/enums/roles.enum';
 import {AuthService} from '../@core/services/auth/auth.service';
 import {MediaMatcher} from '@angular/cdk/layout';
 import { cronogramaService } from '../shared/services/cronograma/cronograma.service';
+import { NotificacionService } from '../shared/services/notificacion-service/notificacion.service';
+import Swal from "sweetalert2";
 
 @Component({
     selector: 'app-pages',
@@ -20,6 +22,8 @@ export class PagesComponent implements OnDestroy {
     public fillerNav;
 
     public listaCronogramas : any = [];
+    public listaNotificaciones : any = [];
+    public sesion_id = localStorage.getItem("user"); //Userio logeado
 
     public MENU_SUBDIR_ITEMS = [
         {name: 'Inicio', route: '/pages', icon: 'home', icon2: 'android'},
@@ -27,10 +31,14 @@ export class PagesComponent implements OnDestroy {
     ];;
 
     constructor(private authService: AuthService,
+        private notificacionService: NotificacionService,
         changeDetectorRef: ChangeDetectorRef,
         private cronogramaService: cronogramaService,
         media: MediaMatcher) {
+
         this.getCronogramas(); //TRAEMOS CRONOGRAMAS Y PREGUNTAMOS
+        this.getNotificaciones();
+
         setTimeout(() => {
             this.authService.getUserRoleName()
                 .pipe(
@@ -38,6 +46,7 @@ export class PagesComponent implements OnDestroy {
                     take(1)
                 ).subscribe();
         }, 2000);
+
         this.mobileQuery = media.matchMedia('(max-width: 600px)');
         this._mobileQueryListener = () => changeDetectorRef.detectChanges();
         this.mobileQuery.addListener(this._mobileQueryListener);
@@ -51,7 +60,6 @@ export class PagesComponent implements OnDestroy {
  * @param {Roles} role - Roles
  */
     showMenu(role: Roles): void {
-
         switch (role) {
             case Roles.Admin:
                 this.fillerNav = MENU_ADMIN_ITEMS;
@@ -90,7 +98,7 @@ export class PagesComponent implements OnDestroy {
             for (let q of this.listaCronogramas) {
                 for (let i of q.actividades) {
                     for (let j of i.subActividad) {
-                        if ( (j?.protegido != true) && (this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString()) <= 75) ) { //ENCUENTRA SUBACTIVIDADES SIN PROTEGER Y DE 0 A 75
+                        if ( (j?.protegido != true) && (this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString()) <= 70) ) { //ENCUENTRA SUBACTIVIDADES SIN PROTEGER Y DE 0 A 75
                             //console.log("j j j: ",j.nombreSub); Detecta subact. desprotegidas y de 0% a 75%
                             this.MENU_SUBDIR_ITEMS = [
                                 {name: 'Inicio', route: '/pages', icon: 'home', icon2: 'android'},
@@ -98,6 +106,43 @@ export class PagesComponent implements OnDestroy {
                             ];
                         }
                     }
+                }
+            }
+        });
+    }
+
+    private getNotificaciones(): void {
+        //console.log("Se ejecuta getNotificaciones()");
+        this.notificacionService.getAll().subscribe((notificacion)=>{
+            //console.log("NotificacionesZZ: ", notificacion);
+            this.listaNotificaciones = notificacion;
+            //console.log(typeof(this.sesion_id));
+            //console.log("Id sesion actual: ", this.sesion_id.substring(8,32));
+            for (let notif of this.listaNotificaciones) {
+                //console.log(notif.usuario," == ", this.sesion_id.substring(8,32), "#1");
+                //console.log(notif.usuario," == ", this.sesion_id.substring(24,48), "#2");
+
+                if ((this.sesion_id.substring(8,32) == notif.usuario)||this.sesion_id.substring(24,48) == notif.usuario) {
+                    //console.log(" SE CUMPLE LA CONDICION ");
+                    //=========
+                    Swal.fire({
+                        title: '<b>Producto: </b>'+notif.detalle,
+                        icon: 'info',
+                        html:
+                          '<b>Detalle: </b>'+notif.mensaje+'<br><br><b>Se ha PROTEGIDO la propiedad intelectual</b>',
+                        showConfirmButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: "Aceptar",
+                        cancelButtonText: "Cerrar",
+                      }).then((result) => {
+                        if (result.value == true) {
+                            //console.log("resultZZZZZZZ");
+                            this.notificacionService.removeNotificacion(notif._id).subscribe();
+                        }
+                      })
+
+                      //this.notificacionService.removeNotificacion(notif._id).subscribe();//ELIMINAR NOTIFICACION DESPUES DE VISTA
+                    //=========
                 }
             }
         });

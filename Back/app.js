@@ -32,6 +32,7 @@ const firma = require("./api/firma/routes/firma.routes");
 const unidadRoutes = require("./api/unidad/routes/unidad.routes");
 const necesidadRoutes = require("./api/necesidad/routes/necesidad.routes");
 const propiedadintRoutes = require("./api/propiedad-intelectual/routes/propiedadint.routes"); //Propiedadintelectual
+const notificacionRoutes = require("./api/notificacion/routes/notificacion.routes"); //NOTIFICACIONES
 const mongoose = require("mongoose");
 
 
@@ -99,6 +100,7 @@ app.use(apiBaseUrl, projectTypeRoutes);
 app.use(apiBaseUrl, projectEntryRoutes);
 app.use(apiBaseUrl, necesidadRoutes);
 app.use(apiBaseUrl, propiedadintRoutes); //PROPIEDAD INTELECTUAL
+app.use(apiBaseUrl, notificacionRoutes); //NOTIFICACIONES
 app.use(apiBaseUrl, invProgramRoutes);
 app.use(apiBaseUrl, invLineRoutes);
 app.use(apiBaseUrl, invSubProgramRoutes);

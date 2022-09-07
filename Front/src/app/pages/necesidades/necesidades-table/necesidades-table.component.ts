@@ -160,7 +160,7 @@ export class NecesidadesTableComponent implements OnInit, AfterViewInit {
 
   private getNecesidades(): void {
     this.necesidadService.getAll().subscribe((necesidad) => {
-      console.log("necesidad >>>", necesidad);
+      //console.log("necesidad >>>", necesidad);
       // @ts-ignore
       this.necesidades = necesidad.necesidades;
       this.dataSource.data = this.necesidades;

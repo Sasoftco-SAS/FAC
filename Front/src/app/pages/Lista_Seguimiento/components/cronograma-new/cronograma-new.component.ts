@@ -11,6 +11,8 @@ import { Actividad } from "../../../../shared/services/saveStateService/StateInt
 import { Form, FormControl, Validators } from "@angular/forms"; //Se importa Formbuilder y Validators para crear formularios y validar campos
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { PropiedadintService } from "src/app/shared/services/propiedadint-service/propiedadint.service";
+import { NotificacionService } from "src/app/shared/services/notificacion-service/notificacion.service";
+import { UsersService } from "src/app/pages/admin/users/services/users.service";
 import { UpdateNececidadesTableServiceService } from "src/app/shared/services/general/update-nececidades-table-service.service";
 import { Router } from "@angular/router";
 import { forkJoin } from "rxjs";
@@ -46,6 +48,7 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
   public sesion_rol = localStorage.getItem("Role"); //Traemos el rol logeado
   public proyecto_propiedadint = [];
   public SubActmodal = "";
+  public tipo = "Propiedad intelectual";
   public formPropiedad!: FormGroup;
   public idProyectoCronograma = "";
   public idCronograma = "";
@@ -53,10 +56,15 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
   public cronogramaParaActualizar;
   public nombreActividad = "";
   public nombresProyectos = {}; //obj vacio
+  public id_Investigador = "";
+  public investigador = {};
+  public user_identificacion = "";
 
   constructor(
     private cronogramaService: cronogramaService,
     private propiedadintService: PropiedadintService,
+    private notificacionService: NotificacionService,
+    private userService: UsersService,
     private rutaActiva: ActivatedRoute,
     private updateNececidadesTableServiceService: UpdateNececidadesTableServiceService,
     private projectService: ProjectService,
@@ -81,6 +89,14 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
     this.builder();
   }
 
+  consoleLog(index){
+    console.log("***ConsoleLog***: ", index);
+  }
+
+  getActividadesLength(cronograma){
+    return (cronograma.actividades.length);
+  }
+
   metodocrearPropiedad() {
     const descripcionProteccion = this.formPropiedad.value;
     //console.log("Descripcion", descripcionProteccion[0]);
@@ -99,8 +115,8 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
           Swal.fire('Protegido con éxito')
         });
 
-      this.propiedadintService
-        .createPropiedad(
+      //Creando el registro de propiedad intelectual
+      this.propiedadintService.createPropiedad(
           this.idProyectoCronograma,
           this.idCronograma,
           this.subact,
@@ -113,6 +129,17 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
             throw error;
           }
         );
+
+      //Obteniendo el usuario para la notificacion
+      this.userService.getAll().subscribe((usuarios) => {
+        for (let usuario of usuarios) {
+          if(usuario.identification == this.user_identificacion){
+            this.notificacionService.createNotificacion(usuario,this.proyecto_propiedadint[0].descripcion,this.proyecto_propiedadint[0].tipoProducto,this.tipo,).subscribe(() => {});
+          }
+        }
+      });
+
+      //Creando el registro de notificación
     }
   }
 
@@ -152,9 +179,13 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
     this.SubActmodal = nombresubAct;
     this.idProyectoCronograma = idProyectoCronograma;
     this.idCronograma = idCronograma;
+
+    //console.log("idProyectoCronograma: ",idProyectoCronograma);
+
     this.projectService.getById(idProyectoCronograma).subscribe((proyecto) => {
       let prEsperados = proyecto.Proyecto.productosEsperados;
-      //console.log(prEsperados);
+      this.user_identificacion = proyecto.Proyecto.EquipoInvestigaciones[0].identificacion;
+      //console.log(this.user_identificacion);
       prEsperados.forEach((element) => {
         //console.log(element)
         if (element.subActividad === nombresubAct) {
@@ -170,6 +201,7 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
   }
 
   getProjectName(id: string){
+    //console.log("id: ", id);
     return this.nombresProyectos[id];
   }
 
@@ -215,10 +247,10 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
               let xd = -1;
               for (let j of k.subActividad) {
                 xd++;
-                if ( (this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString())) > 76 ) {
+                if ( (this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString())) > 70 ) {
                   k.subActividad.splice(xd,1);
                   while (k.subActividad[xd]) {
-                    if ( (this.calculateAdvance(k.subActividad[xd].fechaInicio.toString(), k.subActividad[xd].fechaFinal.toString())) > 76 ) {
+                    if ( (this.calculateAdvance(k.subActividad[xd].fechaInicio.toString(), k.subActividad[xd].fechaFinal.toString())) > 70 ) {
                       k.subActividad.splice(xd,1);
                     }else{
                       xd++;
@@ -234,11 +266,10 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
             response.forEach((item : any) => {
               this.nombresProyectos[item.Proyecto._id] = item.Proyecto.iniciarProyecto[0].nombreProyecto;
             })
-            //console.log(this.nombresProyectos);
+            //console.log("Nombres: ",this.nombresProyectos);
           })
 
-          //MI PROBLEMA ES QUE NO SÉ CUÁNDO SE TERMINA DE LLENAR LISTA_NOMBRESPR *************
-          console.log("Cronogramas:",JSON.parse( JSON.stringify(this.listaCronogramas) ))
+          //console.log("Cronogramas:",JSON.parse( JSON.stringify(this.listaCronogramas) ))
 
         });
     }

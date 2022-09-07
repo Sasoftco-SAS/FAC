@@ -74,7 +74,7 @@ export class PropiedadintTableComponent implements OnInit, AfterViewInit {
       this.Propiedades = [];
       propiedades.map(propiedad => {
         this.Propiedades.push(propiedad);
-        console.log(this.Propiedades)
+        //console.log(this.Propiedades)
         this.dataSource.data = this.Propiedades;
       });
   });
