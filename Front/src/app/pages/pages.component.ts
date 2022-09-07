@@ -126,10 +126,10 @@ export class PagesComponent implements OnDestroy {
                     //console.log(" SE CUMPLE LA CONDICION ");
                     //=========
                     Swal.fire({
-                        title: '<b>Producto: </b>'+notif.detalle,
+                        title: '<b>Proyecto: </b>'+notif.detalle2,
                         icon: 'info',
                         html:
-                          '<b>Detalle: </b>'+notif.mensaje+'<br><br><b>Se ha PROTEGIDO la propiedad intelectual</b>',
+                          '<b>Producto: </b>'+notif.detalle+'<br><br><b>Detalle: </b>'+notif.mensaje+'<br><br><b>Se ha PROTEGIDO la propiedad intelectual</b>',
                         showConfirmButton: true,
                         showCancelButton: true,
                         confirmButtonText: "Aceptar",

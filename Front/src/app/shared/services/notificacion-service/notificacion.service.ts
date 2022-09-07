@@ -12,8 +12,8 @@ export class NotificacionService {
       private http: ApiService,
   ) { }
 
-  createNotificacion(usuario, mensaje: string, detalle: string, tipo: string) {
-    return this.http.post(`${this.endpoint}`, {usuario, mensaje, detalle, tipo}, null, true);
+  createNotificacion(usuario, mensaje: string, detalle: string, detalle2: string,tipo: string) {
+    return this.http.post(`${this.endpoint}`, {usuario, mensaje, detalle, detalle2, tipo}, null, true);
   }
 
   getAll() {

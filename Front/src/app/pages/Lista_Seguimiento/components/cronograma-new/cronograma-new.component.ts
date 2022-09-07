@@ -59,6 +59,7 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
   public id_Investigador = "";
   public investigador = {};
   public user_identificacion = "";
+  public nombre_proyecto_notif  = "";
 
   constructor(
     private cronogramaService: cronogramaService,
@@ -134,7 +135,7 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
       this.userService.getAll().subscribe((usuarios) => {
         for (let usuario of usuarios) {
           if(usuario.identification == this.user_identificacion){
-            this.notificacionService.createNotificacion(usuario,this.proyecto_propiedadint[0].descripcion,this.proyecto_propiedadint[0].tipoProducto,this.tipo,).subscribe(() => {});
+            this.notificacionService.createNotificacion(usuario,this.proyecto_propiedadint[0].descripcion,this.proyecto_propiedadint[0].tipoProducto,this.nombre_proyecto_notif,this.tipo,).subscribe(() => {});
           }
         }
       });
@@ -179,11 +180,11 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
     this.SubActmodal = nombresubAct;
     this.idProyectoCronograma = idProyectoCronograma;
     this.idCronograma = idCronograma;
-
     //console.log("idProyectoCronograma: ",idProyectoCronograma);
 
     this.projectService.getById(idProyectoCronograma).subscribe((proyecto) => {
       let prEsperados = proyecto.Proyecto.productosEsperados;
+      this.nombre_proyecto_notif =  proyecto.Proyecto.iniciarProyecto[0].nombreProyecto;
       this.user_identificacion = proyecto.Proyecto.EquipoInvestigaciones[0].identificacion;
       //console.log(this.user_identificacion);
       prEsperados.forEach((element) => {

@@ -8,6 +8,7 @@ let NotificacionSchema = Schema({
     usuario: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     mensaje: String,
     detalle: String,
+    detalle2: String,
     tipo: String,
 })
 
