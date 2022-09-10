@@ -48,6 +48,8 @@ export class CreateProyectComponent implements OnInit {
     public hasError = false;
     public messageError = '';
     public firmas: FirmasInterface[];
+    public firmas_finalizar: FirmasInterface[];
+
 
     private state: StateInterface;
 
@@ -67,7 +69,7 @@ export class CreateProyectComponent implements OnInit {
         this.state = this.saveStateService.getState();
         if (this.IdProyec !== null) {
             this.Val = true;
-            console.log('ACTUALIZAR');
+            //console.log('ACTUALIZAR');
         }
     }
 
@@ -101,6 +103,7 @@ export class CreateProyectComponent implements OnInit {
             resumen: localStorage.getItem('resumen'),
             ValorTotal: 0,
             firmas: this.createFirmasInterface(UserId, this.getInvestigadorId(), primerPaso.comandante, primerPaso.gestorId),
+            firmas_finalizar: this.createFirmasInterface(UserId, this.getInvestigadorId(), primerPaso.comandante, primerPaso.gestorId),
             planteamiento: cuartoPaso.planteamiento,
             riesgos: cuartoPaso.riesgos
         };
@@ -112,6 +115,7 @@ export class CreateProyectComponent implements OnInit {
             const {primerPaso, segundoPaso, tercerPaso, cuartoPaso, quintoPaso} = this.state;
             const actividades = this.state.tercerPaso.actividades;
             const proyectoNuevo = this.crearObjetoProyectoNuevo();
+            //console.log("date: ",proyectoNuevo);
 
             if (!primerPaso) {
                 this.messageError = 'Falta información en el primer paso';
@@ -140,8 +144,11 @@ export class CreateProyectComponent implements OnInit {
             }
 
             if (!this.hasError) {
+                //console.log("Proyecto: ",proyectoNuevo);
                 this.projectService.add(proyectoNuevo)
                     .subscribe(responseCreateProject => {
+                        //console.log("Proyecto entero: ",responseCreateProject.Proyecto);
+                        //console.log("date: ",responseCreateProject.Proyecto.date);
                         const proyectId = responseCreateProject.Proyecto._id;
                         const {Convocatoria: ConvocatoriaId} = proyectoNuevo;
                         const cronograma: cronogramaObj = {ConvocatoriaId, proyectId, actividades};
@@ -173,6 +180,11 @@ export class CreateProyectComponent implements OnInit {
                     });
             }
         } catch (error) {
+            // this.state = this.saveStateService.getState();
+            // const {primerPaso, segundoPaso, tercerPaso, cuartoPaso, quintoPaso} = this.state;
+            // const actividades = this.state.tercerPaso.actividades;
+            // const proyectoNuevo = this.crearObjetoProyectoNuevo();
+            // console.log("date: ",proyectoNuevo);
             this.messageError = 'Falta información, revisa el formulario';
             this.hasError = true;
         }

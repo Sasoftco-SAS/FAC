@@ -6,7 +6,7 @@ var bcrypt = require('bcrypt-nodejs');
 const {validationResult} = require('express-validator/check');
 
 /**
- * Método para traer los usuarios ACTIVOS
+ * Método para traer los proyectos
  * @param req
  * @param res
  * @param next
@@ -23,7 +23,7 @@ function getAll(req, res, next) {
 }
 
 /**
- * Método para traer un usuario
+ * Método para traer un proyecto
  * @param req
  * @param res
  * @param next
@@ -58,7 +58,7 @@ function getById(req, res, next) {
 
 
 /**
- * Método para crear un usuario
+ * Método para crear un proyecto
  * @param req
  * @param res
  * @param next
@@ -74,11 +74,36 @@ function create(req, res, next) {
             if (err) {
                 return res.status(400).send({message: 'Password encryption problem.'});
             }
+            //console.log("//////////////inicio/////////");
+            let date = new Date();
+            let year = date.getFullYear();
+            let day = date.getDate();
+            let month = date.getMonth();
 
+            let dateAux = `${day}-${month + 1}-${year}`;//Ya estan usando el date asi.
+            //console.log("fecha_inicio: ", date);
+
+            let date2 = dateAux.split('-');
+            let endDate = new Date(date2);
+            endDate.setMonth(Number(date2[1]) - 1 + Number(Proyecto.iniciarProyecto.duracion));
+            // let year2 = endDate.getFullYear();
+            // let day2 = endDate.getDate();
+            // let month2 = endDate.getMonth();
+
+            //endDate = `${day2}-${month2 + 1}-${year2}`;
+
+            Proyecto.date = dateAux;
+            Proyecto.date_inicio = date;
+            Proyecto.date_fin = endDate;
+
+            //console.log("Proyecto: ", Proyecto);
+            //console.log("duración: ", Proyecto.iniciarProyecto.duracion);
+            //console.log("fecha_fin: ",endDate);
+            //console.log("//////////////fin/////////");
             if (hash) {
                 Proyecto.password = hash;
                 let ProyectoObj = JSON.parse(JSON.stringify(Proyecto));
-
+                //console.log("ProyectoObj: ", ProyectoObj);
                 ProyectoDao['create'](ProyectoObj)
                     .then(async _Proyecto => {
                         res.status(201).json({"Proyecto": _Proyecto});
@@ -107,7 +132,7 @@ function create(req, res, next) {
 
 
 /**
- * Método para actualizar un usuario
+ * Método para actualizar un proyecto
  * @param req
  * @param res
  * @param next
@@ -352,7 +377,7 @@ function getIdConv(req, res) {
 }
 
 /**
- * Método para eliminar un Usuario
+ * Método para eliminar un proyecto
  * @param req
  * @param res
  * @param next

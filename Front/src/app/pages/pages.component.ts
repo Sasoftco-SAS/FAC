@@ -6,7 +6,10 @@ import {AuthService} from '../@core/services/auth/auth.service';
 import {MediaMatcher} from '@angular/cdk/layout';
 import { cronogramaService } from '../shared/services/cronograma/cronograma.service';
 import { NotificacionService } from '../shared/services/notificacion-service/notificacion.service';
+import { ProjectService } from '../shared/services/Proyect/project.service';
+import { UsersService } from './admin/users/services/users.service';
 import Swal from "sweetalert2";
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
     selector: 'app-pages',
@@ -23,7 +26,10 @@ export class PagesComponent implements OnDestroy {
 
     public listaCronogramas : any = [];
     public listaNotificaciones : any = [];
+    public listaProyectos : any = [];
     public sesion_id = localStorage.getItem("user"); //Userio logeado
+    public sesion_user = JSON.parse(localStorage.getItem('user')); //Userio logeado
+    public usuario_logueado;
 
     public MENU_SUBDIR_ITEMS = [
         {name: 'Inicio', route: '/pages', icon: 'home', icon2: 'android'},
@@ -32,12 +38,15 @@ export class PagesComponent implements OnDestroy {
 
     constructor(private authService: AuthService,
         private notificacionService: NotificacionService,
+        private proyectoService: ProjectService,
         changeDetectorRef: ChangeDetectorRef,
+        private userService: UsersService,
         private cronogramaService: cronogramaService,
         media: MediaMatcher) {
 
         this.getCronogramas(); //TRAEMOS CRONOGRAMAS Y PREGUNTAMOS
         this.getNotificaciones();
+        //this.getProyectosdelInvestigador();
 
         setTimeout(() => {
             this.authService.getUserRoleName()
@@ -148,7 +157,51 @@ export class PagesComponent implements OnDestroy {
         });
     }
 
-    //Obtiene porcentaje de avance de subactividad
+    private getProyectosdelInvestigador(): void{
+        //console.log("Entra al metodo getprinv");
+        //Obtenemos los proyectos cuyo inv.principal coincidan con el usuario logeado.
+        this.proyectoService.getAll().subscribe((proyecto)=>{
+            let listaProyectos2 = proyecto;
+            //console.log("//=//", this.listaProyectos.Proyectos);
+            //console.log("//nombre//: ", this.sesion_user.profile.names);
+            //console.log("//apellido//: ", this.sesion_user.profile.surname);
+            for (let pr of listaProyectos2.Proyectos) {
+                if( (this.sesion_user.profile.names == pr.EquipoInvestigaciones[0].nombres) && (this.sesion_user.profile.surname == pr.EquipoInvestigaciones[0].apellido) ) {
+                    //console.log("Encontrado");
+                    this.listaProyectos.push(pr);
+                }
+            }
+
+            for (let proyecto_iterador of this.listaProyectos) {
+                if(proyecto_iterador.date_inicio && proyecto_iterador.date_fin){
+                    //console.log("Avance proyecto: ",(this.calculateAdvance(proyecto_iterador.date_inicio.toString(), proyecto_iterador.date_fin.toString())) );
+                    if( (this.calculateAdvance(proyecto_iterador.date_inicio.toString(), proyecto_iterador.date_fin.toString())) > 49){
+                        if(this.sesion_user.role.name == "Investigador"){
+                            console.log("Generar botón para iniciar flujo de firmas");
+                        }
+                        Swal.fire({
+                            title: '<b>NOTIFICACIÓN</b>',
+                            icon: 'info',
+                            html:
+                              '<br><b>Hay proyectos próximos a finalizar (60% + )</b>',
+                            showConfirmButton: true,
+                            showCancelButton: true,
+                            confirmButtonText: "Aceptar",
+                            cancelButtonText: "Cerrar",
+                          }).then((result) => {
+                            if (result.value == true) {
+                                //console.log("resultZZZZZZZ");
+                                //this.notificacionService.removeNotificacion(notif._id).subscribe();
+                            }
+                          })
+                    }
+                }
+            }
+            //console.log("Encontrados", this.listaProyectos[0]); //console.log("Encontrados", this.listaProyectos);
+        })
+    }
+
+    //Obtiene porcentaje de avance
     public calculateAdvance(firstDate: string, secondDate: string): number {
         const startDate = new Date(firstDate);
         const endDate = new Date(secondDate);

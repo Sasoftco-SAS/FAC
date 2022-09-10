@@ -20,6 +20,7 @@ export interface Proyect {
     date?: string;
     estadoArte?: string;
     firmas?: FirmasInterface[];
+    firmas_finalizar?: FirmasInterface[];
     grupos?: Grupo[];
     informaciones?: informacion[];
     iniciarProyecto?: iniciarProyecto;

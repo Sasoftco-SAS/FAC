@@ -14,7 +14,8 @@ export const MENU_INVESTIGADOR_ITEMS = [
     {name: 'Instructivos', route: 'instructional', icon: 'date_range'},
     {name: 'Mis proyectos', route: 'evaluacion', icon: 'text_snippet'},
     {name: 'Lista de Seguimientos', route: 'seguimiento', icon: 'list'},
-    {name: 'Firmas', route: 'firmas', icon: 'border_color'}
+    {name: 'Firmas', route: 'firmas', icon: 'border_color'},
+    {name: 'Finalizar Proyectos', route: 'finalizar_proyectos', icon: 'vpn_key'}
 ];
 export const MENU_EVALUATOR_ITEMS = [
     {name: 'Inicio', route: '/pages', icon: 'home'},

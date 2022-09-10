@@ -39,7 +39,7 @@ export class ListaProyectosModalComponent implements OnInit {
     }
 
     public firmar(firma): void {
-        const {idFirma, idProyecto} = firma;
+        const {idFirma, idProyecto} = firma; //Los envia en el row y pertenecen a listadoDeFirma[]
         this.firmaService.firmar(idFirma, idProyecto)
             .subscribe(() => {
                 this.dialog.open(SucessDialogComponent, {

@@ -91,11 +91,15 @@ export class EstadisticasComponent implements OnInit {
     private calculateEndDate(): void {
         if (this.fechaDeInicio) {
             const fechaDeInicioArray = this.fechaDeInicio.split('-');
+            //console.log("Fecha Array: ", fechaDeInicioArray);
+            //console.log("Duracion: ", this.duracion);
             const nuevaFecha = `${fechaDeInicioArray[1]}-${fechaDeInicioArray[0]}-${fechaDeInicioArray[2]}`;
             const endDate = new Date(nuevaFecha);
             endDate.setMonth(Number(fechaDeInicioArray[1]) - 1 + Number(this.duracion));
+            //console.log("endDate: ", endDate.getFullYear()); //2023
             this.finalDate = `${endDate.getMonth() + 1}/${endDate.getDate()}/${endDate.getFullYear()}`;
             this.initialDate = `${fechaDeInicioArray[1]}/${fechaDeInicioArray[0]}/${fechaDeInicioArray[2]}`;
+            //console.log("Fechas: ", this.initialDate, " // ", this.finalDate);
         }
     }
 

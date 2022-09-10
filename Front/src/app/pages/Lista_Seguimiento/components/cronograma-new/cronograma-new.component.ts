@@ -248,6 +248,9 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
               let xd = -1;
               for (let j of k.subActividad) {
                 xd++;
+                // console.log("fecha inicio: ", j.fechaInicio.toString());
+                // console.log("fecha final: ", j.fechaFinal.toString());
+                // console.log("Avance: ", (this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString())));
                 if ( (this.calculateAdvance(j.fechaInicio.toString(), j.fechaFinal.toString())) > 70 ) {
                   k.subActividad.splice(xd,1);
                   while (k.subActividad[xd]) {
@@ -366,6 +369,7 @@ export class CronogramaNewComponent implements OnInit, AfterViewInit {
   public calculateAdvance(firstDate: string, secondDate: string): number {
     const startDate = new Date(firstDate);
     const endDate = new Date(secondDate);
+    //console.log(startDate,"asdasd", endDate);
     const today = new Date();
 
     if (startDate > today) {

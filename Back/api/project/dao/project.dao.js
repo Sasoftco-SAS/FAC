@@ -62,21 +62,21 @@ ProyectoSchema.static('getByEmail', async (email) => {
  * create User
  */
 ProyectoSchema.static('create', async (project) => {
+
     if (typeof project !== 'object') {
-        throw new TypeError('User is not a valid object.');
+        throw new TypeError('Project is not a valid object.'); DESCOMENTARRRRRRR
     }
 
-    const date = new Date();
-    const year = date.getFullYear();
-    const day = date.getDate();
-    const month = date.getMonth();
-
-    const user = {
+    // const date = new Date();
+    // const year = date.getFullYear();
+    // const day = date.getDate();
+    // const month = date.getMonth();
+    const proyecto = {
         ...project,
-        date: `${day}-${month + 1}-${year}`
+        //date: `${day}-${month + 1}-${year}`
     }
 
-    let _user = new ProyectoDao(user);
+    let _user = new ProyectoDao(proyecto);
     let saved = await _user.save();
     let __user = await ProyectoDao.findOne({_id: saved._id})
         .populate('UserId')

@@ -1,0 +1,36 @@
+
+<div class="text-center col-lg-12 col-md-12 col-xs-12 overflow-auto card-centros-listado__table-div">
+    <table #clasificar="matSort" mat-table [dataSource]="dataSource" matSort class="container-tabla mat-elevation-z8">
+        <ng-container matColumnDef="proyecto">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Proyecto</th>
+            <td mat-cell *matCellDef="let element"> {{element.iniciarProyecto[0].nombreProyecto}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="avance">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Avance</th>
+            <td mat-cell *matCellDef="let element"> {{calculateAdvance(element.date_inicio,element.date_fin)}}%</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+            <th scope="col" mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let row">
+                <ul>
+                    <li>
+                        <button
+                                mat-icon-button
+                                aria-label="Example icon-button with a heart icon"
+                                matTooltipClass="tooltip-white"
+                                matTooltip="Finalizar proyecto"
+                                (click)="iniciarFirmas(row)"
+                                matTooltipPosition="right"
+                        >
+                            <mat-icon>vpn_key</mat-icon>
+                        </button>
+                    </li>
+                </ul>
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+    </table>
+</div>

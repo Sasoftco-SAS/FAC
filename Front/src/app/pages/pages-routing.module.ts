@@ -94,6 +94,11 @@ const routes: Routes = [
                 canActivate: [AuthGuardService]
             },
             {
+                path: 'finalizar_proyectos',//Finalizar proyectos route
+                loadChildren: () => import('./finalizar-proyectos-inv/finalizar-proyectos-inv.module').then(m => m.FinalizarProyectosInvModule),
+                canActivate: [AuthGuardService]
+            },
+            {
                 path: '**',
                 redirectTo: '',
                 pathMatch: 'full',
