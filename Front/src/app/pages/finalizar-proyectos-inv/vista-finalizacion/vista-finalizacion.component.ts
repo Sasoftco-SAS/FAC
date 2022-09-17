@@ -4,43 +4,48 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {
     DetalleRubroComponent,
     DetalleRubroData
-} from '../../../formulacion/components/presupuesto/components/componente-presupuestal/detalle-rubro/detalle-rubro.component';
+} from 'src/app/pages/formulacion/components/presupuesto/components/componente-presupuestal/detalle-rubro/detalle-rubro.component';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {AuthStorageService} from './../../../../@core/services/storage/auth-storage/auth-storage.service';
-import {SucessDialogComponent, SucessDialogData} from '../../../admin/Dialog/sucess-dialog/sucess-dialog.component';
+import {AuthStorageService} from '../../../@core/services/storage/auth-storage/auth-storage.service';
+import {SucessDialogComponent, SucessDialogData} from '../../admin/Dialog/sucess-dialog/sucess-dialog.component';
 import * as jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import html2canvas from 'html2canvas';
-import {cronogramaService} from '../../../../shared/services/cronograma/cronograma.service';
+import {cronogramaService} from '../../../shared/services/cronograma/cronograma.service';
 import {
     Actividad,
     Entidad,
     MetodologiaObjetivo, Planteamiento, Riesgo,
     RubrosPorEntidades
-} from '../../../../shared/services/saveStateService/StateInterface';
+} from '../../../shared/services/saveStateService/StateInterface';
 import {finalize} from 'rxjs/operators';
-import {FirmaService} from '../../../../shared/services/firma/firma.service';
-import {CommonSimpleModel} from '../../../../shared/models/common-simple.model';
-import {ProjectEntryService} from '../../../../shared/services/project-entry/project-entry.service';
+import {FirmaService} from '../../../shared/services/firma/firma.service';
+import {CommonSimpleModel} from '../../../shared/models/common-simple.model';
+import {ProjectEntryService} from '../../../shared/services/project-entry/project-entry.service';
+import { UsersService } from "src/app/pages/admin/users/services/users.service";
+import { InvCenterService } from '../../../shared/services/inv-center2/inv-center.service';
+
 
 require('jspdf-autotable');
 
 @Component({
-    selector: 'app-vista-formulacion',
-    templateUrl: './vista-formulacion.component.html',
-    styleUrls: ['./vista-formulacion.component.scss']
+    selector: 'app-vista-finalizacion',
+    templateUrl: './vista-finalizacion.component.html',
+    styleUrls: ['./vista-finalizacion.component.scss']
 })
-export class VistaFormulacionComponent implements OnInit {
+export class VistaFinalizacionComponent implements OnInit {
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public data: VistaFormulacionData,
+        @Inject(MAT_DIALOG_DATA) public data: VistaFinalizacionData,
         private projectService: ProjectService,
         public dialog: MatDialog,
         private auto: AuthStorageService,
         private cronogramaServic: cronogramaService,
         private firmaService: FirmaService,
         private projectEntryService: ProjectEntryService,
-        public dialogRef: MatDialogRef<VistaFormulacionComponent>) {
+        private userService: UsersService,
+        private centroInvService: InvCenterService,
+        public dialogRef: MatDialogRef<VistaFinalizacionComponent>) {
     }
 
     public nombreProyecto: string;
@@ -81,7 +86,6 @@ export class VistaFormulacionComponent implements OnInit {
     public grupos = [];
     public productosEsperados = [];
     public pregunta;
-    public date;
     public centroDeInvestigacion;
     public convocatoriaId;
     public rubroOpcion: CommonSimpleModel[] = [];
@@ -104,18 +108,36 @@ export class VistaFormulacionComponent implements OnInit {
     public fechaFirmaInvestigadorPrincipal_finalizar;
     public fechaFirmaGestorActi_finalizar;
     public fechaFirmaComandante_finalizar;
+    public firmaJefeCentro;
     public firmas = [];
     public firmas_finalizar = [];
     public listaDeRubros = [];
     public riesgos: Riesgo[] = [];
     public listaDeActividades: Actividad[] = [];
     public totalAdvance = 0;
-
+    public date;
+    public date2;
+    public date_hoy;
+    public montoTotal = 0;
     public LIMIT_RUBROS = 2;
     public FECHA_FIRMA = 'Fecha de firma: ';
+    public indice_global = 0;
+    public monto_ejecutado = 0;
+    public monto_ejecutado_aux = 0;
+    public investigador_principal;
+    public listaRubros = [];
+    public pregunta_uno;
+    public pregunta_dos;
+    public pregunta_tres;
+    public pregunta_cuatro;
+    public pregunta_cinco;
+    public firma_jefecentro;
+    public centrosDeInv : any = [];
+    public usuario_JefeDeCentro;
 
     ngOnInit(): void {
         this.getAll();
+        //console.log(this.usuario_JefeDeCentro);
     }
 
     public calculateAdvance(firstDate: string, secondDate: string): number {
@@ -138,22 +160,51 @@ export class VistaFormulacionComponent implements OnInit {
         }
     }
 
+    getCentrosInv(): void {
+        this.centroInvService.getAll().subscribe((centrosInv: any)=>{
+            this.centrosDeInv = centrosInv.invCenters;
+        });
+    }
+
     public getAll(): void {
+        let date_hoy2 = new Date();
+        let year2 = date_hoy2.getFullYear();
+        let day2 = date_hoy2.getDate();
+        let month2 = date_hoy2.getMonth();
+        this.date_hoy = `${day2}-${month2 + 1}-${year2}`;
+
         this.projectService.getById(this.data.idProyecto)
             .pipe(finalize(() => {
+                //this.getCentrosInv();
                 this.getCronograma();
                 this.getRubroOpcion();
                 this.getTotalAmount();
                 this.getFirmas();
             }))
             .subscribe(r => {
+
+                // for (let centro of this.centrosDeInv) {
+                //     if(centro.name == r.iniciarProyecto[0].centroDeInvestigacion){
+                //         this.userService.getById(centro.jefe._id).subscribe((user)=>{
+                //             this.usuario_JefeDeCentro = user;
+                //         });
+                //     }
+                // }
+
+                this.pregunta_uno = r.Proyecto.preguntasFinalizacion[0].respuesta_preg_uno;
+                this.pregunta_dos = r.Proyecto.preguntasFinalizacion[0].respuesta_preg_dos;
+                this.pregunta_tres = r.Proyecto.preguntasFinalizacion[0].respuesta_preg_tres;
+                this.pregunta_cuatro = r.Proyecto.preguntasFinalizacion[0].respuesta_preg_cuatro;
+                this.pregunta_cinco = r.Proyecto.preguntasFinalizacion[0].respuesta_preg_cinco;
+                this.firma_jefecentro = r.Proyecto.preguntasFinalizacion[0].firma_jefeCentro;
+                this.date = r.Proyecto.date;
+                this.date2 = r.Proyecto.date2;
                 this.convocatoriaId = r.Proyecto.Convocatoria._id,
                 this.nombreProyecto = r.Proyecto.iniciarProyecto[0].nombreProyecto;
                 this.centroDeInvestigacion = r.Proyecto.iniciarProyecto[0].centroDeInvestigacion;
                 this.linea = r.Proyecto.iniciarProyecto[0].linea;
                 this.modelo = r.Proyecto.iniciarProyecto[0].modelo;
                 this.grupos = r.Proyecto.grupos;
-                this.date = r.Proyecto.date;
                 this.firmas = r.Proyecto.firmas,
                 this.firmas_finalizar = r.Proyecto.firmas_finalizar,
                 this.programa = r.Proyecto.iniciarProyecto[0].programa;
@@ -170,6 +221,14 @@ export class VistaFormulacionComponent implements OnInit {
                 this.ComandanteNumber = r.Proyecto.iniciarProyecto[0].comandante.phoneNumber;
                 this.unidadDependencia = r.Proyecto.iniciarProyecto[0].dependencia;
                 this.equipoInvestigacion = r.Proyecto.EquipoInvestigaciones;
+                this.userService.getAll().subscribe((usuarios) => {
+                    for (let usuario of usuarios) {
+                      if(usuario.identification == r.Proyecto.EquipoInvestigaciones[0].identificacion){
+                        this.investigador_principal = usuario;
+                        //console.log(this.investigador_principal);
+                      }
+                    }
+                  });
                 this.objetivoGeneral = r.Proyecto.objetivoGeneral;
                 this.objetivosEspecificos = r.Proyecto.objetivosEspecificos;
                 this.resumen = r.Proyecto.resumen;
@@ -184,10 +243,42 @@ export class VistaFormulacionComponent implements OnInit {
                 this.bibliografias = r.Proyecto.bibliografias;
                 this.productosEsperados = [...r.Proyecto.productosEsperados];
                 this.dataSourceRubro = r.Proyecto.AgregarDetallesRubros;
+                this.listaRubros = r.Proyecto.AgregarDetallesRubros[0].listaRubros;
                 this.entidades = r.Proyecto.Entidades;
                 this.planteamiento = r.Proyecto.planteamiento;
                 this.riesgos = r.Proyecto.riesgos ? r.Proyecto.riesgos : [];
+                this.calcularMontoEjecutado();
             });
+    }
+
+    private indice_global_metodo(){
+        if(this.dataSourceRubro[this.indice_global+1]){
+            this.indice_global = this.indice_global+1;
+        }else{
+            this.indice_global = 0;
+        }
+    }
+
+    private montoEjecutado(indice: number) {
+        return (this.dataSourceRubro[indice].gastoRubrosTotal);
+    }
+
+    private calcularMontoEjecutado() {
+        let rubro_acumulado = 0;
+        let indice = -1;
+        //console.log(typeof(this.dataSourceRubro));
+
+        for (let tipoRubro of this.dataSourceRubro) {
+            indice = indice + 1;
+            for (let rubro of tipoRubro.listaRubros) {
+                rubro_acumulado = rubro_acumulado + rubro.rubro;
+            }
+            //console.log("R1: ",rubro_acumulado);
+            this.dataSourceRubro[indice].gastoRubrosTotal = rubro_acumulado;
+            this.monto_ejecutado_aux += rubro_acumulado;
+            rubro_acumulado = 0;
+        }
+        //console.log("Rtotal: ", this.monto_ejecutado_aux);
     }
 
     private calculateTotalAdvance(): void {
@@ -215,7 +306,9 @@ export class VistaFormulacionComponent implements OnInit {
 
     private createRubroObject(): void {
         this.rubroOpcion.forEach(rubro => {
+            //console.log(rubro);
             this.entidades.forEach(entidad => {
+                //console.log(entidad);
                 const efectivo = this.getAmount(entidad.nombre, 'Efectivo', rubro.descr);
                 const especie = this.getAmount(entidad.nombre, 'Especie', rubro.descr);
                 const hasRubro = this.listaDeRubros.find(rubroSeleccionado => rubroSeleccionado.nombre === rubro.descr);
@@ -224,6 +317,7 @@ export class VistaFormulacionComponent implements OnInit {
                 }
             });
         });
+        //console.log(this.listaDeRubros);
     }
 
     public calculateRoiIndicator(): string {
@@ -285,6 +379,10 @@ export class VistaFormulacionComponent implements OnInit {
     }
 
     private getFirmas(): void {
+        //this.usuario_JefeDeCentro
+        // this.firmaService.getFirma(this.usuario_JefeDeCentro._id).subscribe(response => {
+        //     this.firma_jefecentro = response.firma});
+
         this.firmas.map(firma => {
             if (firma.name === 'Investigador' && firma.status) {
                 this.getFirma(firma.idQuienFirma, 'Investigador', firma.date);
@@ -481,7 +579,7 @@ export interface iniciarProyecto {
     telefonoGestor: number;
 }
 
-export interface VistaFormulacionData {
+export interface VistaFinalizacionData {
     idProyecto: string;
     evaluar: boolean;
     valor?: any;

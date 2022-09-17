@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PropiedadIntRoutingModule } from './propiedad-routing.module';
+import { FinProyectosRoutingModule } from './finalizar-proyectos.module';
 import { FinProyectosHomeComponent } from './finalizar_proyectos-home/finalizar_proyectos-home.component';
 import { PagesModule } from '../pages.module';
 import { FinalizarPrTableComponent } from './finalizar_proyectos-table/finalizar_proyectos-table.component';
+import { VistaFinalizacionComponent, VistaFinalizacionData } from './vista-finalizacion/vista-finalizacion.component';
 
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTableModule} from '@angular/material/table';
@@ -34,10 +35,10 @@ import { MatSortModule } from '@angular/material/sort';
 
 
 @NgModule({
-  declarations: [FinProyectosHomeComponent, FinalizarPrTableComponent],
+  declarations: [FinProyectosHomeComponent, FinalizarPrTableComponent, VistaFinalizacionComponent],
   imports: [
     CommonModule,
-    PropiedadIntRoutingModule,
+    FinProyectosRoutingModule,
     PagesModule,
     MatSortModule,
     MatTableModule,

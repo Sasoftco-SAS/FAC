@@ -1,0 +1,183 @@
+<div class="container">
+    <div class="container">
+        <div class="row">
+            <div id="PROYECTPDF">
+                <table class="table table-pdf-form centrar-todo">
+                    <thead>
+                    <tr>
+                        <td class="image-table" colspan="3" rowspan="3">
+                            <img src="assets/images/logo.png" alt="Logo FAC">
+                        </td>
+                        <td class="cssencabezado" colspan="5">FUERZA AÉREA COLOMBIANA</td>
+                        <td class="cssencabezado" colspan="1">Código</td>
+                        <td class="cssencabezado" colspan="3">GH-JEAES-FR-377</td>
+                    </tr>
+                    <tr>
+                        <td class="cssencabezado" colspan="5" rowspan="2">
+                            FORMATO DE INFORME DE CIERRE FINANCIERO PROYECTOS DE INVESTIGACIÓN, DESARROLLO TECNOLÓGICO E INNOVACIÓN (I+D+I)
+                        </td>
+                        <td colspan="1" class="cssencabezado">Versión N°</td>
+                        <td colspan="3" class="cssencabezado">02</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" class="cssencabezado">Vigencia</td>
+                        <td colspan="3" class="cssencabezado">26-08-2021</td>
+                    </tr>
+                    </thead>
+                </table>
+
+                <div class="table-codigo-right">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td class="title-table-codigo"><label>Código</label></td>
+                            <td>DICTI-___/20___</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <table class="table table-pdf-form">
+                    <thead>
+                    <tr class="table-title">
+                        <td style="width: 100%" colspan="6">1. Información General del Proyecto</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 10%">Título</td>
+                        <td style="width: 90%" colspan="5">{{nombreProyecto}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%">Investigador Líder</td>
+                        <td style="width: 25%">{{equipoInvestigacion[0].nombres}} {{equipoInvestigacion[0].apellido}}</td>
+                        <td style="width: 25%">Correo</td>
+                        <td style="width: 25%" colspan="3">{{investigador_principal?.email}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 16%">Fecha inicio proyecto</td>
+                        <td style="width: 16%">{{date}}</td>
+                        <td style="width: 16%">Fecha término proyecto</td>
+                        <td style="width: 16%">{{date2}}</td>
+                        <td style="width: 16%">Duración (días)</td>
+                        <td style="width: 16%">{{duracion*30}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%">Costo inicial del proyecto</td>
+                        <td style="width: 25%">$ {{totalDelProyecto}}</td>
+                        <td style="width: 25%">Costo final del proyecto</td>
+                        <td style="width: 25%" colspan="3">$ {{monto_ejecutado_aux}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%">Fuente(s) de financiación</td>
+                        <td style="width: 25%">XXXXXXX</td>
+                        <td style="width: 25%">Fecha del informe</td>
+                        <td style="width: 25%" colspan="3">{{date_hoy}}</td>
+                    </tr>
+                    </thead>
+                </table>
+
+                <table class="table table-pdf-form">
+                    <thead>
+                    <tr class="table-title">
+                        <td style="width: 100%" colspan="5">2. Cumplimiento Plan de inversión del Proyecto</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100%" colspan="3">
+                            <div>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <td class="title-table-estructura" style="width: 20%"><label>Rubro</label></td>
+                                        <td class="title-table-estructura" style="width: 20%"><label>Presupuesto asignado</label></td>
+                                        <td class="title-table-estructura" style="width: 20%"><label>Presupuesto ejecutado</label></td>
+                                        <td class="title-table-estructura" style="width: 20%"><label>Descripción</label></td>
+                                        <td class="title-table-estructura" style="width: 20%"><label>Soportes</label></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ng-container *ngFor="let rubro of dataSourceRubro; let i = index;">
+                                        <tr>
+                                            <td>
+                                                <b>{{rubro.NombreRubro}}</b>
+                                            </td>
+                                            <td>
+                                                <b>$ {{rubro.EntidadesCostos}}</b>
+                                            </td>
+                                            <td>
+                                                <b>$ {{montoEjecutado(indice_global)}}</b>
+                                                {{indice_global_metodo()}}
+                                            </td>
+                                            <td>{{rubro.Descripcion}}</td>
+                                            <td>- - -</td>
+                                        </tr>
+                                    </ng-container>
+                                    <tr>
+                                        <td class="title-table-estructura"><label>TOTAL PROYECTO</label></td>
+                                        <td class="title-table-estructura"><label>$ {{totalDelProyecto}}</label>
+                                        <td class="title-table-estructura"><label>$ {{monto_ejecutado_aux}}</label>
+                                        <td class="title-table-estructura" colspan="2"><label>- - -</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title-table-estructura" style="width: 20%"><label>Quien presenta el informe</label></td>
+                                        <td class="title-table-estructura" style="width: 20%" class="firma-imagen-center"><label>{{equipoInvestigacion[0].nombres}} {{equipoInvestigacion[0].apellido}}</label></td>
+                                        <td class="title-table-estructura" style="width: 20%"><label>Firma</label></td>
+                                        <td class="title-table-estructura" style="width: 20%" colspan="2" class="firma-imagen-center">
+                                            <img class="firma-imagen-pdf" *ngIf="firmaInvestigadorPrincipal"
+                                            src="data:image/png;base64,{{firmaInvestigadorPrincipal.data}}" alt="Imagen De Firma">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+
+                <table class="table table-pdf-form">
+                    <thead>
+                    <tr class="table-title">
+                        <td style="width: 100%" colspan="2">3. Validación del Informe de Cierre Financiero</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%">¿El costo real del proyecto coincidió con el costo inicialmente planeado?</td>
+                        <td style="width: 20%">{{pregunta_uno}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%">¿De no corresponder, las modificaciones al plan de inversión fueron aprobadas por la DICTI?</td>
+                        <td style="width: 20%">{{pregunta_dos}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%">¿La información contenida en el informe de cierre financiero del proyecto está debidamente soportada?</td>
+                        <td style="width: 20%">{{pregunta_tres}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%">Los costos para la ejecución del proyecto respecto de lo planeado fueron:</td>
+                        <td>{{pregunta_cuatro}}</td>
+                    </tr>
+                    <tr>
+                        <td>Determine las acciones a tomar en caso de que los costos para la ejecución del proyecto de investigación hayan sido superiores o inferiores a lo inicialmente planeado. (Reconocimiento / Inicio de acciones disciplinarias y/o administrativas, otras)</td>
+                        <td>{{pregunta_cinco}}</td>
+                    </tr>
+                    <!-- {{usuario_JefeDeCentro.profile[0].names}} {{usuario_JefeDeCentro.profile.surname}} -->
+                    <tr>
+                        <td style="width: 50%">Jefe Centro de I+D+i o Subdirector de Investigación e Innovación</td>
+                        <td style="width: 50%">xxx</td>
+                    </tr>
+                    <!-- {{firma_jefecentro.data}} -->
+                    <tr>
+                        <td style="width: 20%">Firma</td>
+                        <td style="width: 80%">xxx</td>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <mat-dialog-actions align="end">
+            <button (click)="downloadPDF()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Generar PDF</button>
+            <button mat-button mat-dialog-close (click)="closeModal()">Cerrar</button>
+        </mat-dialog-actions>
+    </div>
+</div>

@@ -5,7 +5,7 @@ import {
     informacion,
     EquipoInvestigacion,
     iniciarProyecto,
-    bibliografia, FirmasInterface
+    bibliografia, FirmasInterface, preguntasFinalizacionInterface
 } from '../../../../shared/models/project.model';
 import {ProjectService} from '../../../../shared/services/Proyect/project.service';
 import {AuthStorageService} from '../../../../@core/services/storage/auth-storage/auth-storage.service';
@@ -49,6 +49,7 @@ export class CreateProyectComponent implements OnInit {
     public messageError = '';
     public firmas: FirmasInterface[];
     public firmas_finalizar: FirmasInterface[];
+    public preguntasFinalizacion: preguntasFinalizacionInterface[];
 
 
     private state: StateInterface;
@@ -104,6 +105,7 @@ export class CreateProyectComponent implements OnInit {
             ValorTotal: 0,
             firmas: this.createFirmasInterface(UserId, this.getInvestigadorId(), primerPaso.comandante, primerPaso.gestorId),
             firmas_finalizar: this.createFirmasInterface(UserId, this.getInvestigadorId(), primerPaso.comandante, primerPaso.gestorId),
+            preguntasFinalizacion: this.createRespuestasInterface(),
             planteamiento: cuartoPaso.planteamiento,
             riesgos: cuartoPaso.riesgos
         };
@@ -283,6 +285,19 @@ export class CreateProyectComponent implements OnInit {
                 idQuienFirma: gestor,
                 status: false,
             }
+        ];
+    }
+
+    createRespuestasInterface(): preguntasFinalizacionInterface[] {
+        return [
+            {
+                respuesta_preg_uno: 'N/A',
+                respuesta_preg_dos: 'N/A',
+                respuesta_preg_tres: 'N/A',
+                respuesta_preg_cuatro: 'N/A',
+                respuesta_preg_cinco: 'N/A',
+                firma_jefeCentro: false,
+            },
         ];
     }
 

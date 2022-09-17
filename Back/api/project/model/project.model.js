@@ -11,8 +11,10 @@ date.getMonth()
 let ProjectSchema = new Schema({
 
   date: String,
+  date2: String,
   date_inicio: Date,
   date_fin: Date,
+  finalizado: Boolean,
   UserId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   Convocatoria: { type: mongoose.Schema.Types.ObjectId, ref: "Convocatoria" },
   objetivosEspecificos: [{ descr: String }],
@@ -25,6 +27,16 @@ let ProjectSchema = new Schema({
       personaACargo: String,
       numeroDeContacto: String,
       email: String,
+    },
+  ],
+  preguntasFinalizacion: [
+    {
+      respuesta_preg_uno: String,
+      respuesta_preg_dos: String,
+      respuesta_preg_tres: String,
+      respuesta_preg_cuatro: String,
+      respuesta_preg_cinco: String,
+      firma_jefeCentro: Boolean,
     },
   ],
   EquipoInvestigaciones: [
@@ -159,7 +171,7 @@ let ProjectSchema = new Schema({
   }],
   firmas_finalizar: [{
     name: String,
-    idQuienFirma: String,
+    idQuienFirma: String, //Mongoose
     status: Boolean,
     date: Date,
   }],

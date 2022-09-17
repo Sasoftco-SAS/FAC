@@ -558,6 +558,7 @@
                     <tr class="table-title">
                         <td style="width: 100%" colspan="4">FORMALIZACIÓN DEL PROYECTO</td>
                     </tr>
+
                     <tr>
                         <td style="width: 25%">Investigador</td>
                         <td style="width: 75%" colspan="3" class="firma-imagen-center">
@@ -566,6 +567,7 @@
                             <div *ngIf="fechaFirmaInvestigador">{{FECHA_FIRMA}}{{fechaFirmaInvestigador | date: 'medium' }}</div>
                         </td>
                     </tr>
+
                     <tr>
                         <td style="width: 25%">Investigador Principal Titular</td>
                         <td style="width: 75%" colspan="3" class="firma-imagen-center">
@@ -574,22 +576,70 @@
                             <div *ngIf="fechaFirmaInvestigadorPrincipal">{{FECHA_FIRMA}}{{fechaFirmaInvestigadorPrincipal| date: 'medium' }}</div>
                         </td>
                     </tr>
+
                     <tr>
-                        <td style="width: 25%">Gestor ACTI</td>
+                        <td style="width: 25%">Comandante Unidad/Jefe Dependencia</td>
                         <td style="width: 75%" colspan="3" class="firma-imagen-center">
                             <img class="firma-imagen-pdf" *ngIf="firmaComandante"
                                  src="data:image/png;base64,{{firmaComandante.data}}" alt="Imagen De Firma">
                             <div *ngIf="fechaFirmaComandante">{{FECHA_FIRMA}}{{fechaFirmaComandante| date: 'medium' }}</div>
                         </td>
                     </tr>
+
                     <tr>
-                        <td style="width: 25%">Comandante Unidad/Jefe Dependencia</td>
+                        <td style="width: 25%">Gestor ACTI</td>
                         <td style="width: 75%" colspan="3" class="firma-imagen-center">
                             <img class="firma-imagen-pdf" *ngIf="firmaGestorActi"
                                  src="data:image/png;base64,{{firmaGestorActi.data}}" alt="Imagen De Firma">
                             <div *ngIf="fechaFirmaGestorActi">{{FECHA_FIRMA}}{{fechaFirmaGestorActi| date: 'medium' }}</div>
                         </td>
                     </tr>
+
+                    </thead>
+                </table>
+
+                <table class="table table-pdf-form">
+                    <thead>
+                    <tr class="table-title">
+                        <td style="width: 100%" colspan="4">FINALIZACIÓN DEL PROYECTO</td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 25%">Investigador</td>
+                        <td style="width: 75%" colspan="3" class="firma-imagen-center">
+                            <img class="firma-imagen-pdf" *ngIf="firmaInvestigador_finalizar"
+                                 src="data:image/png;base64,{{firmaInvestigador_finalizar.data}}" alt="Imagen De Firma">
+                            <div *ngIf="fechaFirmaInvestigador_finalizar">{{FECHA_FIRMA}}{{fechaFirmaInvestigador_finalizar | date: 'medium' }}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 25%">Investigador Principal Titular</td>
+                        <td style="width: 75%" colspan="3" class="firma-imagen-center">
+                            <img class="firma-imagen-pdf" *ngIf="firmaInvestigadorPrincipal_finalizar"
+                                 src="data:image/png;base64,{{firmaInvestigadorPrincipal_finalizar.data}}" alt="Imagen De Firma">
+                            <div *ngIf="fechaFirmaInvestigadorPrincipal_finalizar">{{FECHA_FIRMA}}{{fechaFirmaInvestigadorPrincipal_finalizar| date: 'medium' }}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 25%">Gestor ACTI</td>
+                        <td style="width: 75%" colspan="3" class="firma-imagen-center">
+                            <img class="firma-imagen-pdf" *ngIf="firmaGestorActi_finalizar"
+                                 src="data:image/png;base64,{{firmaGestorActi_finalizar.data}}" alt="Imagen De Firma">
+                            <div *ngIf="fechaFirmaGestorActi_finalizar">{{FECHA_FIRMA}}{{fechaFirmaGestorActi_finalizar| date: 'medium' }}</div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="width: 25%">Comandante</td>
+                        <td style="width: 75%" colspan="3" class="firma-imagen-center">
+                            <img class="firma-imagen-pdf" *ngIf="firmaComandante_finalizar"
+                                 src="data:image/png;base64,{{firmaComandante_finalizar.data}}" alt="Imagen De Firma">
+                            <div *ngIf="fechaFirmaComandante_finalizar">{{FECHA_FIRMA}}{{fechaFirmaComandante_finalizar| date: 'medium' }}</div>
+                        </td>
+                    </tr>
+
                     </thead>
                 </table>
 
@@ -755,6 +805,7 @@
                 </tr>
                 </thead>
             </table>
+
         </div>
     </div>
 

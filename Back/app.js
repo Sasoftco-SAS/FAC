@@ -33,10 +33,20 @@ const unidadRoutes = require("./api/unidad/routes/unidad.routes");
 const necesidadRoutes = require("./api/necesidad/routes/necesidad.routes");
 const propiedadintRoutes = require("./api/propiedad-intelectual/routes/propiedadint.routes"); //Propiedadintelectual
 const notificacionRoutes = require("./api/notificacion/routes/notificacion.routes"); //NOTIFICACIONES
+const finalizarprRoutes = require ("./api/finalizar-proyecto/routes/finalizar-proyecto.routes"); //FinalizaPr Routes
 const mongoose = require("mongoose");
 
-
 const app = express();
+
+
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
+app.use( express.urlencoded( {
+    extended: true,
+    limit: '50mb'
+} ) )
+
 app.use(cors());
 
 const localConnection = "mongodb://127.0.0.1:27017/fac_db_prod";
@@ -101,6 +111,7 @@ app.use(apiBaseUrl, projectEntryRoutes);
 app.use(apiBaseUrl, necesidadRoutes);
 app.use(apiBaseUrl, propiedadintRoutes); //PROPIEDAD INTELECTUAL
 app.use(apiBaseUrl, notificacionRoutes); //NOTIFICACIONES
+app.use(apiBaseUrl, finalizarprRoutes); //Finalizar Proyectos
 app.use(apiBaseUrl, invProgramRoutes);
 app.use(apiBaseUrl, invLineRoutes);
 app.use(apiBaseUrl, invSubProgramRoutes);

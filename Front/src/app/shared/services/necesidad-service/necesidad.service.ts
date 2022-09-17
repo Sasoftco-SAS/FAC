@@ -37,7 +37,7 @@ export class NecesidadService {
     return this.http.delete(`${this.endpoint}`, {body: {id}}, true);
   }
 
-  //Cambios recientes
+
   patchNecesidad(id: string, necesidad: Necesidad): Observable<any>{
     return this.http.patch(`${this.endpoint}/${id}`, necesidad, null, true); //BEARER es el true del final
   }

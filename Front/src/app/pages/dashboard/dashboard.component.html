@@ -26,6 +26,7 @@
                     <td class="table-border-left">{{NAME}}</td>
                     <td>{{CONVOCATORIA}}</td>
                     <td>{{STATUS}}</td>
+                    <td>FINALIZADO</td>
                     <td>{{DATE}}</td>
                     <td class="table-border-right">{{ACTIONS}}</td>
                 </tr>
@@ -47,6 +48,14 @@
                         </div>
                         <div class="project-active" *ngIf="!project.ProyectoBloqueado">
                             <label>Activo</label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="project-active" *ngIf="project.finalizado">
+                            <label>SÍ</label>
+                        </div>
+                        <div class="project-block" *ngIf="!project.finalizado">
+                            <label>NO</label>
                         </div>
                     </td>
                     <td>{{project.date}}</td>

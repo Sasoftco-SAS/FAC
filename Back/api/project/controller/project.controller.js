@@ -81,25 +81,46 @@ function create(req, res, next) {
             let month = date.getMonth();
 
             let dateAux = `${day}-${month + 1}-${year}`;//Ya estan usando el date asi.
-            //console.log("fecha_inicio: ", date);
 
             let date2 = dateAux.split('-');
-            let endDate = new Date(date2);
-            endDate.setMonth(Number(date2[1]) - 1 + Number(Proyecto.iniciarProyecto.duracion));
-            // let year2 = endDate.getFullYear();
-            // let day2 = endDate.getDate();
-            // let month2 = endDate.getMonth();
 
-            //endDate = `${day2}-${month2 + 1}-${year2}`;
+            // console.log("date2 mes: ", date2[1]);
+
+            let endDate = new Date();
+            let year3 = endDate.getFullYear();
+            let day3 = endDate.getDate();
+            let month3 = endDate.getMonth();
+
+            // console.log("endDate_#0: ",endDate);
+            // console.log("day: ",day3);
+            // console.log("month: ",month3);
+
+            //console.log("se suma duración (",Proyecto.iniciarProyecto.duracion," mes)...");
+            endDate.setMonth(Number(date2[1]) - 1 + Number(Proyecto.iniciarProyecto.duracion));
+
+            let year2 = endDate.getFullYear();
+            let day2 = endDate.getDate();
+            let month2 = endDate.getMonth();
+
+            // console.log("endDate_#1: ",endDate);
+            // console.log("day: ",day2);
+            // console.log("month: ",month2);
+
+            let endDate2 = `${day2}-${month2 + 1 }-${year2}`;
+
+            Proyecto.finalizado = false;
+
+            Proyecto.date2 = endDate2;
+            Proyecto.date_fin = endDate;
 
             Proyecto.date = dateAux;
             Proyecto.date_inicio = date;
-            Proyecto.date_fin = endDate;
-
             //console.log("Proyecto: ", Proyecto);
-            //console.log("duración: ", Proyecto.iniciarProyecto.duracion);
-            //console.log("fecha_fin: ",endDate);
+            //console.log("endDate_#2: ",endDate);
+            // console.log("fecha inicio: ", dateAux);
+            // console.log("endDate2: ", endDate2);
             //console.log("//////////////fin/////////");
+
             if (hash) {
                 Proyecto.password = hash;
                 let ProyectoObj = JSON.parse(JSON.stringify(Proyecto));
@@ -143,6 +164,7 @@ function update(req, res, next) {
 
         let Proyecto = req.body;
         let ProyectoObj = JSON.parse(JSON.stringify(Proyecto));
+        console.log(ProyectoObj);
         let ProyectoId = req.params.id;
 
         ProyectoDao['update'](ProyectoId, ProyectoObj)
@@ -274,7 +296,6 @@ async function updateRubro(req, res, next) {
     try {
         const project = req.body;
         const ProjectObject = JSON.parse(JSON.stringify(project));
-        //console.log("ProjectObject /////// ", req.body);
         const {ProjectId, rubro, idRubro, consecutivo} = ProjectObject;
         const {file} = req.files;
         const factura = {
@@ -287,42 +308,43 @@ async function updateRubro(req, res, next) {
         //     delete necesidad.name;
         // }
 
-        //console.log("ProjectId ",ProjectId);    //ProjectId
-        //console.log("idRubro ",idRubro);    //RubroId
-        //console.log("factura ",factura);    //Factura
-        //console.log("rubro ",rubro);    //Monto
-        //console.log("Consecutivo ",consecutivo);    //Consecutivo es 'undefined' para los otros rubros
-
         //CREAMOS EL CONSECUTIVO
         const projectObj = await ProyectoDao.findOne({_id: ProjectId})
         //console.log(projectObj);
         if(consecutivo!='undefined'){
-            //console.log("Distinto: ", consecutivo);
+            //console.log("////Distinto////", consecutivo);
+            //console.log(projectObj.AgregarDetallesRubros[0].listaRubros);
             projectObj.AgregarDetallesRubros[0].listaRubros.map(rubroActual => {
                 if ( (String(rubroActual._id) === idRubro) ) {//Encontramos el rubro que vamos a editar
                     //console.log(rubroActual.rubro);
                     rubroActual.rubro = rubro;
                     rubroActual.factura = factura;
                     rubroActual.consecutivo = consecutivo;
-
+                    //console.log("Antes de update consecutivo");
                     ProyectoDao['update'](ProjectId, projectObj)
                         .then(async _Proyecto => {
+                            //console.log("Pasa por ctrll 2");
                             if (!_Proyecto) {
                                 res.status(404).json({message: 'Proyecto not found.'});
                             } else {
+                                //console.log("Pasa por ctrll exitoso");
                                 res.status(200).json({"Proyecto": _Proyecto});
                             }
                         }).catch(err => res.status(500).json({message: err}));
                 }
             });
         }else{
-            //console.log("Es undefined: ", consecutivo);
-            projectObj.AgregarDetallesRubros[0].listaRubros.map(rubroActual => {
-                if ( (String(rubroActual._id) === idRubro) ) {//Encontramos el rubro que vamos a editar
-                    //console.log(rubroActual.rubro);
+            //console.log("Es undefined", idRubro);
+            //console.log(projectObj.AgregarDetallesRubros[0].listaRubros);// NO ES EN LA POSICION 0 DE AGREGARDETALLESRUBROS
+
+            projectObj.AgregarDetallesRubros.map(detalleRubro => {
+                detalleRubro.listaRubros.map(rubroActual => {
+                    if ( (String(rubroActual._id) === idRubro) ) {
+                    //console.log(rubroActual);
                     rubroActual.rubro = rubro;
                     rubroActual.factura = factura;
                     //console.log("Nuevo monto: ", rubroActual.rubro, "Nueva factura: ", rubroActual.factura);
+                    //console.log("Antes de update Undefined");
                     ProyectoDao['update'](ProjectId, projectObj)
                         .then(async _Proyecto => {
                             if (!_Proyecto) {
@@ -331,28 +353,26 @@ async function updateRubro(req, res, next) {
                                 res.status(200).json({"Proyecto": _Proyecto});
                             }
                         }).catch(err => res.status(500).json({message: err}));
-                }
-            });
+                    }
+                })
+            })
+            //     if ( (String(rubroActual._id) === idRubro) ) {//Encontramos el rubro que vamos a editar
+            //         //console.log(rubroActual);
+            //         rubroActual.rubro = rubro;
+            //         rubroActual.factura = factura;
+            //         //console.log("Nuevo monto: ", rubroActual.rubro, "Nueva factura: ", rubroActual.factura);
+            //         console.log("Antes de update Undefined");
+            //         ProyectoDao['update'](ProjectId, projectObj)
+            //             .then(async _Proyecto => {
+            //                 if (!_Proyecto) {
+            //                     res.status(404).json({message: 'Proyecto not found.'});
+            //                 } else {
+            //                     res.status(200).json({"Proyecto": _Proyecto});
+            //                 }
+            //             }).catch(err => res.status(500).json({message: err}));
+            //     }
+            // });
         }
-        // projectObj.AgregarDetallesRubros.map(rubroActual => {
-        //     if ((String(rubroActual._id) === idRubro) && ( (rubroActual.NombreRubro) == "Adquisición de equipos" )) {
-        //         //console.log(rubroActual)
-        //         const rubrosLength = ((rubroActual.listaRubros).length)
-        //         const consecutivo = ((projectObj.iniciarProyecto[0].centroDeInvestigacion).substr(0,3)+"_")+(rubrosLength+1)
-        //         rubroActual.listaRubros.push({rubro, factura, consecutivo}) //CREA EL GASTO Y LE AÑADE CONSECUTIVO
-        //     }else if ((String(rubroActual._id) === idRubro) && ( (rubroActual.NombreRubro) != "Adquisición de equipos" )){
-        //         rubroActual.listaRubros.push({rubro, factura}) //CREA EL GASTO SIN CONSECUTIVO PORQUE NO ES ADQUISICION
-        //     }
-        // })
-
-        // ProyectoDao['update'](ProjectId, projectObj) //DESCOMENTAR**********************
-        //     .then(async _Proyecto => {
-        //         if (!_Proyecto) {
-        //             res.status(404).json({message: 'Proyecto not found.'});
-        //         } else {
-        //             res.status(200).json({"Proyecto": _Proyecto});
-        //         }
-        //     }).catch(err => res.status(500).json({message: err}));
 
     } catch (err) {
         const errorFormatter = ({msg, param}) => {

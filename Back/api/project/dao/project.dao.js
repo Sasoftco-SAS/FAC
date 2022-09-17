@@ -6,7 +6,7 @@ const ProyectoSchema = require('../model/project.model');
 const mongoose = require("mongoose");
 
 /**
- * getAll users
+ * getAll
  */
 ProyectoSchema.static('getAll', async (query) => {
     try {
@@ -23,7 +23,7 @@ ProyectoSchema.static('getAll', async (query) => {
 });
 
 /**
- * getById User
+ * getById
  */
 ProyectoSchema.static('getById', async (id) => {
 
@@ -64,7 +64,7 @@ ProyectoSchema.static('getByEmail', async (email) => {
 ProyectoSchema.static('create', async (project) => {
 
     if (typeof project !== 'object') {
-        throw new TypeError('Project is not a valid object.'); DESCOMENTARRRRRRR
+        throw new TypeError('Project is not a valid object.');
     }
 
     // const date = new Date();

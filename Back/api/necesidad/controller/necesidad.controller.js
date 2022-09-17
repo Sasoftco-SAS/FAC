@@ -77,7 +77,7 @@ const create = async (req, res, next) => { //Se convierte en un ArrayFunction co
 };
 
 /**
- * Método para eliminar unidad
+ * Método para eliminar necesidad
  * @param req
  * @param res
  * @param next

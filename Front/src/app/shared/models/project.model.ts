@@ -7,35 +7,41 @@ import {
 } from '../services/saveStateService/StateInterface';
 
 export interface Proyect {
-    AgregarDetallesRubros?: AgregarDetallesRubros[];
+    date?: string;
+    date2?: string;
+    date_inicio?: Date;
+    date_fin?: Date;
+    finalizado?: boolean;
+    UserId?: string;
     Convocatoria?: string;
-    Entidades?: Entidad[];
-    EquipoInvestigaciones?: EquipoInvestigacion[];
+    objetivosEspecificos?: ObjetivoEspecifico[];
     ProyectoBloqueado?: boolean;
     Seguimiento?: boolean;
-    UserId?: string;
-    ValorTotal?: number;
-    bibliografias?: bibliografia[];
-    calificaciones?: Calificaciones;
-    date?: string;
+    Entidades?: Entidad[];
+    preguntasFinalizacion?: preguntasFinalizacionInterface[];
+    EquipoInvestigaciones?: EquipoInvestigacion[];
+    AgregarDetallesRubros?: AgregarDetallesRubros[];
+    productosEsperados?: productosEsperados[];
+    resultadosPrevios?: string;
+    iniciarProyecto?: iniciarProyecto;
+    metodologia?: string;
+    marcoConceptual?: string;
+    resumen?: string;
+    informaciones?: informacion[];
     estadoArte?: string;
+    bibliografias?: bibliografia[];
+    palabraClaves?: palabraClaves[];
+    resultadosEsperados?: string;
+    objetivoGeneral?: string;
+    grupos?: Grupo[];
+    ValorTotal?: number;
+    calificaciones?: Calificaciones;
     firmas?: FirmasInterface[];
     firmas_finalizar?: FirmasInterface[];
-    grupos?: Grupo[];
-    informaciones?: informacion[];
-    iniciarProyecto?: iniciarProyecto;
-    marcoConceptual?: string;
-    metodologia?: string;
-    objetivoGeneral?: string;
-    objetivosEspecificos?: ObjetivoEspecifico[];
-    palabraClaves?: palabraClaves[];
     planteamiento?: Planteamiento;
-    productosEsperados?: productosEsperados[];
-    resultadosEsperados?: string;
-    resultadosPrevios?: string;
-    resumen?: string;
     evaluadorId?: string;
     riesgos?: Riesgo[];
+    version?: number;
 }
 
 export interface productosEsperados {
@@ -56,6 +62,15 @@ export interface objetivosEspecifico {
 
 export interface bibliografia {
     bibliografia: string;
+}
+
+export interface preguntasFinalizacionInterface {
+    respuesta_preg_uno?: string;
+    respuesta_preg_dos?: string;
+    respuesta_preg_tres?: string;
+    respuesta_preg_cuatro?: string;
+    respuesta_preg_cinco?: string;
+    firma_jefeCentro?: Boolean,
 }
 
 export interface informacion {

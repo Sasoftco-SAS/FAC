@@ -6,7 +6,7 @@ let Schema = mongoose.Schema;
 let InvCenterSchema = Schema({
     name: String,
     jefe: {
-        _id: String,
+        _id: String, //Id del usuario jefe de centro
         profile: {
             names: String,
             surname: String

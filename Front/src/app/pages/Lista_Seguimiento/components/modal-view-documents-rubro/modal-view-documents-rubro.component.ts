@@ -79,7 +79,10 @@ export class ModalViewDocumentsRubroComponent implements OnInit {
       }else{
         this.projectService.patchRubro(this.proyectoId, this.id_rubro, datosGasto.presupuesto, this.fileToUpload, this.consecutivo)
         .subscribe(r => {
-          Swal.fire('Actualizado con éxito')
+          Swal.fire({
+            icon: 'success',
+            title: 'Cambio exitoso',
+          })
         });
       }
     }
