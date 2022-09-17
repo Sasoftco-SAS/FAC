@@ -161,12 +161,15 @@
                     <!-- {{usuario_JefeDeCentro.profile[0].names}} {{usuario_JefeDeCentro.profile.surname}} -->
                     <tr>
                         <td style="width: 50%">Jefe Centro de I+D+i o Subdirector de Investigación e Innovación</td>
-                        <td style="width: 50%">xxx</td>
+                        <td style="width: 50%"> {{nombres_JefeDeCentro}} </td>
                     </tr>
                     <!-- {{firma_jefecentro.data}} -->
                     <tr>
                         <td style="width: 20%">Firma</td>
-                        <td style="width: 80%">xxx</td>
+                        <td class="title-table-estructura" style="width: 20%" colspan="2" class="firma-imagen-center">
+                            <img class="firma-imagen-pdf" *ngIf="this.firma_jefecentro"
+                            src="data:image/png;base64,{{this.firma_jefecentro.data}}" alt="Imagen De Firma Jefe de Centro de Inv.">
+                        </td>
                     </tr>
                     </thead>
                 </table>

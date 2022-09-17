@@ -134,10 +134,10 @@ export class VistaFinalizacionComponent implements OnInit {
     public firma_jefecentro;
     public centrosDeInv : any = [];
     public usuario_JefeDeCentro;
+    public nombres_JefeDeCentro;
 
     ngOnInit(): void {
         this.getAll();
-        //console.log(this.usuario_JefeDeCentro);
     }
 
     public calculateAdvance(firstDate: string, secondDate: string): number {
@@ -160,11 +160,14 @@ export class VistaFinalizacionComponent implements OnInit {
         }
     }
 
-    getCentrosInv(): void {
-        this.centroInvService.getAll().subscribe((centrosInv: any)=>{
-            this.centrosDeInv = centrosInv.invCenters;
-        });
-    }
+    // for (let centro of this.centrosDeInv) {
+    //     if(centro.name == proyecto.iniciarProyecto[0].centroDeInvestigacion){
+    //         this.userService.getById(centro.jefe._id).subscribe((user)=>{
+    //             this.usuario_JefeDeCentro = user;
+    //             console.log(this.usuario_JefeDeCentro);
+    //         });
+    //     }
+    // }
 
     public getAll(): void {
         let date_hoy2 = new Date();
@@ -175,22 +178,12 @@ export class VistaFinalizacionComponent implements OnInit {
 
         this.projectService.getById(this.data.idProyecto)
             .pipe(finalize(() => {
-                //this.getCentrosInv();
                 this.getCronograma();
                 this.getRubroOpcion();
                 this.getTotalAmount();
                 this.getFirmas();
             }))
             .subscribe(r => {
-
-                // for (let centro of this.centrosDeInv) {
-                //     if(centro.name == r.iniciarProyecto[0].centroDeInvestigacion){
-                //         this.userService.getById(centro.jefe._id).subscribe((user)=>{
-                //             this.usuario_JefeDeCentro = user;
-                //         });
-                //     }
-                // }
-
                 this.pregunta_uno = r.Proyecto.preguntasFinalizacion[0].respuesta_preg_uno;
                 this.pregunta_dos = r.Proyecto.preguntasFinalizacion[0].respuesta_preg_dos;
                 this.pregunta_tres = r.Proyecto.preguntasFinalizacion[0].respuesta_preg_tres;
@@ -248,6 +241,20 @@ export class VistaFinalizacionComponent implements OnInit {
                 this.planteamiento = r.Proyecto.planteamiento;
                 this.riesgos = r.Proyecto.riesgos ? r.Proyecto.riesgos : [];
                 this.calcularMontoEjecutado();
+                this.centroInvService.getAll().subscribe((centrosInv: any)=>{
+                    this.centrosDeInv = centrosInv;
+                    for (let centro of this.centrosDeInv.invCenters) {
+                        if(centro.name == r.Proyecto.iniciarProyecto[0].centroDeInvestigacion){
+                           this.nombres_JefeDeCentro = (centro.jefe.profile.names)+" "+(centro.jefe.profile.surname);
+                           if(r.Proyecto.preguntasFinalizacion[0].firma_jefeCentro == true){
+                                this.firmaService.getFirma(centro.jefe._id).subscribe(firma => {
+                                    this.firma_jefecentro = firma.firma;
+                                });
+                            }
+                        }
+                    }
+                });
+
             });
     }
 
