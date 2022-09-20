@@ -29,6 +29,8 @@ export const MENU_EVALUATOR_ITEMS = [
 export const MENU_RESPONSABLE_ITEMS = [
     {name: 'Inicio', route: '/pages', icon: 'home'},
     {name: 'Necesidades', route: 'necesidades', icon: 'help_outline'}, //Ejemplo ruta
+    {name: 'Firmas', route: 'firmas', icon: 'border_color'},
+    {name: 'Finalizar Proyectos', route: 'finalizar_proyectos', icon: 'vpn_key'}
 ];
 
 export const MENU_SUBDIR_ITEMS = [

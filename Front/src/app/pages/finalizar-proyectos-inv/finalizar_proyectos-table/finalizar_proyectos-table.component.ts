@@ -186,12 +186,12 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
   public iniciarFirmas(Proyecto): void {
 
     //Investigador principal
-    if((this.sesion_user.profile.names == Proyecto.EquipoInvestigaciones[0].nombres) && (this.sesion_user.profile.surname == Proyecto.EquipoInvestigaciones[0].apellido)){
+    if((Proyecto.firmas_finalizar[1].status == false) && (this.sesion_user.profile.names == Proyecto.EquipoInvestigaciones[0].nombres) && (this.sesion_user.profile.surname == Proyecto.EquipoInvestigaciones[0].apellido)){
       Swal.fire({
         title: '<b>FINALIZADO CON ÉXITO</b>',
         icon: 'success',
         html:
-          '<br>Usted como <b>Investigador principal</b> ha firmado, iniciando así el <b>proceso de firmas</b>',
+          '<br>Usted como <b>Investigador principal</b> ha firmado, iniciando así el <b>proceso de firmas de finalización</b>',
         showConfirmButton: true,
         confirmButtonText: "Aceptar",
       })
@@ -204,17 +204,17 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
 
       this.FinalizarPrService.createFinalizarPr(Proyecto, 1)
         .subscribe(() => {});
-    }
-
-    if((Proyecto.firmas_finalizar[1].status == true) && (this.sesion_user.profile.names == Proyecto.EquipoInvestigaciones[0].nombres) && (this.sesion_user.profile.surname == Proyecto.EquipoInvestigaciones[0].apellido)){
-      Swal.fire({
-        title: '<b>Oops...</b>',
-        icon: 'error',
-        html:
-          '<br>Usted <b>ya firmó</b> este proceso de finalización',
-        showConfirmButton: true,
-        confirmButtonText: "Aceptar",
-      })
+    }else{
+      if((Proyecto.firmas_finalizar[1].status == true) && (this.sesion_user.profile.names == Proyecto.EquipoInvestigaciones[0].nombres) && (this.sesion_user.profile.surname == Proyecto.EquipoInvestigaciones[0].apellido)){
+        Swal.fire({
+          title: '<b>Oops...</b>',
+          icon: 'error',
+          html:
+            '<br>Usted <b>ya firmó</b> este proceso de finalización',
+          showConfirmButton: true,
+          confirmButtonText: "Aceptar",
+        })
+      }
     }
 
     //Investigador creador del proyecto
