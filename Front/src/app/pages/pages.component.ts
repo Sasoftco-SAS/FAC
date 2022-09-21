@@ -263,7 +263,7 @@ export class PagesComponent implements OnDestroy {
                         title: '<b>¡NOTIFICACIÓN!</b>',
                         icon: 'info',
                         html:
-                            '<br>Usted como Gestor Acti. tiene proyectos <b>pendientes por finalizar</b> si desea <b>firmar</b> visite el módulo de finalización de proyectos.</b>',
+                            '<br>Usted como Gestor ACTI tiene proyectos <b>pendientes por finalizar</b> si desea <b>firmar</b> visite el módulo de finalización de proyectos.</b>',
                         showConfirmButton: true,
                         confirmButtonText: "Aceptar",
                         })

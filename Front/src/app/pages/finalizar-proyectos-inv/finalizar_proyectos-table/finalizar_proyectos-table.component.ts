@@ -55,6 +55,7 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
   public formEncuestaFinalizarPr: FormGroup;
   public id_pr_finalizar;
   public proyecto_final : any = [];
+  public hayProyectos = false;
 
   constructor(
     private modal:NgbModal,
@@ -152,6 +153,7 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
             //console.log("Pr: ", proyecto_iterador.iniciarProyecto[0].nombreProyecto);
             if( (this.calculateAdvance(proyecto_iterador.date_inicio.toString(), proyecto_iterador.date_fin.toString())) > 59){
               //console.log("Avance cumple");
+              this.hayProyectos = true; //Si no hay, mostrará un mensaje de que no hay en lugar de quedarse vacío
               this.listaProyectos2.push(proyecto_iterador);
             }else{
               //console.log("Avance NO cumple");
