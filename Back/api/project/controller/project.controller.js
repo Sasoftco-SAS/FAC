@@ -164,7 +164,7 @@ function update(req, res, next) {
 
         let Proyecto = req.body;
         let ProyectoObj = JSON.parse(JSON.stringify(Proyecto));
-        console.log(ProyectoObj);
+        //console.log(ProyectoObj);
         let ProyectoId = req.params.id;
 
         ProyectoDao['update'](ProyectoId, ProyectoObj)

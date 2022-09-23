@@ -1,5 +1,5 @@
 
-<!--INICIA ESPACIO PARA DEFINIR MODAL EDITAR NECESIDAD-->
+<!--INICIA ESPACIO PARA DEFINIR MODAL FINALIZAR PROYECTO JEFE CENTRO-->
 <ng-template #contenido let-modal>
     <div class="modal-header">
         <button class="close" aria-label="close" type="button" (click)="modal.dismiss()">
@@ -135,5 +135,6 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
     </table>
+    <div class="linea" *ngIf="!hayProyectos"></div>
     <b *ngIf="!hayProyectos"><br>ACTUALMENTE NO HAY PROYECTOS POR MOSTRAR . . .</b>
 </div>

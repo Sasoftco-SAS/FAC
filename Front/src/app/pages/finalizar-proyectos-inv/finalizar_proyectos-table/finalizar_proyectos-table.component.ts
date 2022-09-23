@@ -24,7 +24,6 @@ import { InvCenterService } from "src/app/shared/services/inv-center2/inv-center
 import { forkJoin } from "rxjs";
 import {map} from 'rxjs/operators';
 
-
 import { VistaFinalizacionComponent, VistaFinalizacionData } from "../vista-finalizacion/vista-finalizacion.component";
 import {MatDialog} from '@angular/material/dialog';
 
@@ -61,20 +60,15 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
     private modal:NgbModal,
     private fb: FormBuilder,
     private proyectoService: ProjectService,
-    private authStorageService: AuthStorageService,
     private FinalizarPrService: FinalizarPrService,
-    private auth: AuthStorageService,
-    private firmaService: FirmaService,
-    private UsersService: UsersService,
     private dialog: MatDialog,
     private router: Router,
     private userService: UsersService,
-    private centroInvService: InvCenterService,
     ){
       this.getProyectos();
-      this.dataSource.data = this.listaProyectos2;
+      //this.dataSource.data = this.listaProyectos2;
       this.builder();
-  }
+    }
 
   ngOnInit(): void {
   }
@@ -95,12 +89,14 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  private getProyectos(): void{
+  private getProyectos(){
+    this.hayProyectos = false;
     //Obtenemos los proyectos cuyo inv.principal coincidan con el usuario logeado.
     this.proyectoService.getAll().subscribe((proyecto)=>{
-        let listaProyectos2 = proyecto;
+        let listaProyectos2 = [];
+        this.listaProyectos = [];
 
-        for (let pr of listaProyectos2.Proyectos) {
+        for (let pr of proyecto.Proyectos) {
           if( (this.sesion_user.role.name == "Jefe De Centro") || (pr.firmas_finalizar[0].idQuienFirma == this.sesion_user._id) || (pr.firmas_finalizar[1].idQuienFirma == this.sesion_user._id) || (pr.firmas_finalizar[2].idQuienFirma == this.sesion_user._id) || (pr.firmas_finalizar[3].idQuienFirma == this.sesion_user._id)){
 
             //No ha sido iniciado el flujo de firmas y es inv principal
@@ -147,19 +143,14 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
         }
 
         //FILTRO DE PROYECTOS CUYO AVANCE SEA 60+
-        for (let proyecto_iterador of this.listaProyectos) {
-            //console.log("LISTA: ",this.listaProyectos);
-            //console.log("Avance proyecto: ",(this.calculateAdvance(proyecto_iterador.date_inicio.toString(), proyecto_iterador.date_fin.toString())) );
-            //console.log("Pr: ", proyecto_iterador.iniciarProyecto[0].nombreProyecto);
-            if( (this.calculateAdvance(proyecto_iterador.date_inicio.toString(), proyecto_iterador.date_fin.toString())) > 59){
-              //console.log("Avance cumple");
-              this.hayProyectos = true; //Si no hay, mostrará un mensaje de que no hay en lugar de quedarse vacío
-              this.listaProyectos2.push(proyecto_iterador);
-            }else{
-              //console.log("Avance NO cumple");
-            }
-        }
-        this.dataSource.data = this.listaProyectos2;
+        listaProyectos2 = this.listaProyectos.filter(proyecto=>{
+          if( (this.calculateAdvance(proyecto.date_inicio.toString(), proyecto.date_fin.toString())) > 59){
+            //console.log("Avance cumple");
+            this.hayProyectos = true; //Si no hay, mostrará un mensaje de que no hay en lugar de quedarse vacío
+            return proyecto;
+          }
+        })
+        this.dataSource.data = listaProyectos2;
         //console.log("Encontrados", this.listaProyectos2); //console.log("Encontrados", this.listaProyectos);
     })
   }
@@ -185,7 +176,7 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public iniciarFirmas(Proyecto): void {
+  public iniciarFirmas(Proyecto) {
 
     //Investigador principal
     if((Proyecto.firmas_finalizar[1].status == false) && (this.sesion_user.profile.names == Proyecto.EquipoInvestigaciones[0].nombres) && (this.sesion_user.profile.surname == Proyecto.EquipoInvestigaciones[0].apellido)){
@@ -201,8 +192,10 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
       Proyecto.firmas_finalizar[1].status = true;
       //console.log(Proyecto.firmas_finalizar[1].status);
       Proyecto.firmas_finalizar[1].date = new Date();
-      this.proyectoService.update(Proyecto._id, Proyecto)  //Cambiamos la firma final a true del inv. principal, desaparecera de la tabla actual
-        .subscribe(() => {});
+
+      this.proyectoService.update(Proyecto._id, Proyecto).subscribe(()=>{
+        this.getProyectos();
+      });
 
       this.FinalizarPrService.createFinalizarPr(Proyecto, 1)
         .subscribe(() => {});
@@ -231,8 +224,9 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
       })
       Proyecto.firmas_finalizar[0].status = true;
       Proyecto.firmas_finalizar[0].date = new Date();
-      this.proyectoService.update(Proyecto._id, Proyecto)  //Cambiamos la firma final a true del investigador creador, desaparecera de la tabla actual
-          .subscribe(() => {});
+      this.proyectoService.update(Proyecto._id, Proyecto).subscribe(()=>{
+        this.getProyectos();
+      });
 
       this.FinalizarPrService.getAll().subscribe((elementos)=>{
         let cosas = [...[elementos]];
@@ -268,8 +262,10 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
       })
       Proyecto.firmas_finalizar[3].status = true;
       Proyecto.firmas_finalizar[3].date = new Date();
-      this.proyectoService.update(Proyecto._id, Proyecto)  //Cambiamos la firma final a true del investigador creador, desaparecera de la tabla actual
-          .subscribe(() => {});
+
+      this.proyectoService.update(Proyecto._id, Proyecto).subscribe(()=>{
+        this.getProyectos();
+      });
 
       this.FinalizarPrService.getAll().subscribe((elementos)=>{
         let cosas = [...[elementos]];
@@ -290,6 +286,7 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
           this.FinalizarPrService.updateFinalizarPr(idFinalizarPr, Proyecto, (finalizarPrAux.estado+1) )
          .subscribe(() => {});
         });
+
       });
     }
 
@@ -306,8 +303,9 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
       Proyecto.firmas_finalizar[2].status = true;
       //Proyecto.finalizado = true;
       Proyecto.firmas_finalizar[2].date = new Date();
-      this.proyectoService.update(Proyecto._id, Proyecto)  //Cambiamos la firma final a true del investigador creador, desaparecera de la tabla actual
-          .subscribe(() => {});
+      this.proyectoService.update(Proyecto._id, Proyecto).subscribe(()=>{
+        this.getProyectos();
+      });
 
       this.FinalizarPrService.getAll().subscribe((elementos)=>{
         let cosas = [...[elementos]];
@@ -372,7 +370,6 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
 
   async metodoActualizarProyectoFinalizar(){
     const datos = this.formEncuestaFinalizarPr.value;
-    let proyecto_finalizar : any = [];
 
     const proyectoFinalizar = await this.obtenerProyecto();
 
@@ -394,6 +391,7 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
           showConfirmButton: true,
           confirmButtonText: "Aceptar",
         })
+        this.getProyectos();
         }, error =>{
           console.log("Error al agregar");
           console.log(error);
