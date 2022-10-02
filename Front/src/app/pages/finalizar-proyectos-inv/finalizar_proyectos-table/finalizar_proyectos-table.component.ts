@@ -136,18 +136,15 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
         let listaProyectos2 = [];
         this.listaProyectos = [];
 
-        for (let pr of proyecto.Proyectos) {
+        for (let pr of proyecto.Proyectos) { //Valida que sea el jefe de centro del proyecto o que esté en las firmas o sea vinculado
           if( (this.sesion_user.role.name == "Jefe De Centro") || (pr.firmas_finalizar[0].idQuienFirma == this.sesion_user._id) || (pr.firmas_finalizar[1].idQuienFirma == this.sesion_user._id) || (pr.firmas_finalizar[2].idQuienFirma == this.sesion_user._id) || (pr.firmas_finalizar[3].idQuienFirma == this.sesion_user._id)){
 
+            // if((this.sesion_user.profile.names == pr.EquipoInvestigaciones[0].nombres) && (this.sesion_user.profile.surname == pr.EquipoInvestigaciones[0].apellido)) { //RECIBE TODOS LOS PROYECTOS TERMINADOS
+            //   this.listaProyectos.push(pr); //si es investigador pr. recibe cualquier pr.
+            // }
 
-            if((this.sesion_user.profile.names == pr.EquipoInvestigaciones[0].nombres) && (this.sesion_user.profile.surname == pr.EquipoInvestigaciones[0].apellido)||(this.sesion_user.role.name != "Jefe De Centro")) { //RECIBE TODOS LOS PROYECTOS TERMINADOS
-              this.listaProyectos.push(pr); //si es investigador pr. recibe cualquier pr.
-            }
-
-
-            //No ha sido iniciado el flujo de firmas y es inv principal
-            if( (pr.firmas_finalizar[1].status != true) && (this.sesion_user.profile.names == pr.EquipoInvestigaciones[0].nombres) && (this.sesion_user.profile.surname == pr.EquipoInvestigaciones[0].apellido) ) {
-                //console.log("Encontrado inv principal y no ha sido firmado");
+            //Es inv principal, por ende recibe todos los pr. para poder hacer bienes y servicios
+            if((pr.firmas_finalizar[1].idQuienFirma == this.sesion_user._id) ) {
                 this.listaProyectos.push(pr);
             }else{
               //console.log("NO: ", pr.iniciarProyecto[0].nombreProyecto);
@@ -190,7 +187,7 @@ export class FinalizarPrTableComponent implements OnInit, AfterViewInit {
 
         //FILTRO DE PROYECTOS CUYO AVANCE SEA 60+
         listaProyectos2 = this.listaProyectos.filter(proyecto => {
-          if( (this.calculateAdvance(proyecto.date_inicio.toString(), proyecto.date_fin.toString())) > 59){
+          if( ( (this.calculateAdvance(proyecto.date_inicio.toString(), proyecto.date_fin.toString())) > 59) || (proyecto.firmas_finalizar[1].idQuienFirma == this.sesion_user._id) ){
             //console.log("Avance cumple");
             this.hayProyectos = true; //Si no hay, mostrará un mensaje de que no hay en lugar de quedarse vacío
             return proyecto;
