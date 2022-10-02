@@ -1,0 +1,34 @@
+
+<div class="text-center col-lg-12 col-md-12 col-xs-12 overflow-auto card-centros-listado__table-div">
+    <table #clasificar="matSort" mat-table [dataSource]="dataSource" matSort class="container-tabla mat-elevation-z8">
+
+        <ng-container matColumnDef="investigador">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Investigador</th>
+            <td mat-cell *matCellDef="let element"> {{element.investigador.profile.names}} {{element.investigador.profile.surname}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="premio">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Premio</th>
+            <td mat-cell *matCellDef="let element">
+                <mat-icon *ngIf="element.premio == 'Premio anual de ciencia y tecnologia'">military_tech</mat-icon> 
+                <mat-icon *ngIf="element.premio == 'Medalla de ciencia y tecnologia'">workspace_premium</mat-icon> 
+                <mat-icon *ngIf="element.premio == 'Reconocimiento por terminacion de proyectos'">emoji_events</mat-icon> 
+                {{element.premio}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="merito">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Mérito</th>
+            <td mat-cell *matCellDef="let element"> {{element.merito}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Fecha</th>
+            <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+    </table>
+    <div class="linea" *ngIf="hayInvestigadores == false"></div>
+    <b *ngIf="hayInvestigadores == false"><br>ACTUALMENTE NO HAY INVESTIGADORES POR MOSTRAR . . .</b>
+</div>

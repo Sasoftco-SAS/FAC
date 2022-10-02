@@ -47,6 +47,7 @@ import { EstadisticasComponent } from './Lista_Seguimiento/components/estadistic
 import {ChartsModule} from 'ng2-charts';
 import { NecesidadesModule } from './necesidades/necesidades.module';
 import { PropiedadintModule } from './propiedadint/propiedadint.module';
+import { BienesServiciosModule } from './bienes-servicios/bienes-servicios.module';
 
 
 const PAGES_COMPONENTS = [

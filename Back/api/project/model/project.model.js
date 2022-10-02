@@ -15,6 +15,7 @@ let ProjectSchema = new Schema({
   date_inicio: Date,
   date_fin: Date,
   finalizado: Boolean,
+  bienes_servicios: Boolean,
   UserId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   Convocatoria: { type: mongoose.Schema.Types.ObjectId, ref: "Convocatoria" },
   objetivosEspecificos: [{ descr: String }],
@@ -37,6 +38,26 @@ let ProjectSchema = new Schema({
       respuesta_preg_cuatro: String,
       respuesta_preg_cinco: String,
       firma_jefeCentro: Boolean,
+    },
+  ],
+  preguntasBienesyServicios: [
+    {
+      adm_recursos: String,
+      convenio: String,
+      codigo: String,
+      version: String,
+      vigencia: String,
+      tipo_requerimiento: String,
+      valor_estimado: Number,
+      lugar_entrega: String,
+      objeto_contrato: String,
+      fecharequerida_actainicio: String,
+      info_adicional: String,
+      info_prov_nombre: String,
+      info_prov_ciudad: String,
+      info_prov_direccion: String,
+      info_prov_numero: String,
+      info_prov_correo: String,
     },
   ],
   EquipoInvestigaciones: [
@@ -71,6 +92,8 @@ let ProjectSchema = new Schema({
       listaRubros: [{
         rubro: Number,
         consecutivo: String,
+        //nombre: String, //AÑADIDO PARA FUTUROS DESAROLLOS
+        //observacion: String, //AÑADIDO PARA PDF BIENES Y SERV.
         factura: {
           data: Object,
           name: String,
@@ -129,6 +152,14 @@ let ProjectSchema = new Schema({
   palabraClaves: [
     {
       palabra: String,
+    },
+  ],
+  observaciones_rubros: [
+    {
+      cantidad: String,
+      nombre: String,   //OTROS BIENES Y SERVICIOS, PDF DE BIENES Y SERVICIOS
+      observacion: String,
+      unidad: String,
     },
   ],
   resultadosEsperados: String,

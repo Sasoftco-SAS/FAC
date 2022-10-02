@@ -1,0 +1,283 @@
+<div class="container">
+    <div class="container">
+        <div class="row">
+            <div id="PROYECTPDF">
+                <table class="table table-pdf-form centrar-todo">
+                    <thead>
+                    <tr>
+                        <td class="image-table" colspan="3" rowspan="3">
+                            <img src="assets/images/logo.png" alt="Logo FAC">
+                        </td>
+                        <td class="cssencabezado" colspan="5">FUERZA AÉREA COLOMBIANA</td>
+                        <td class="cssencabezado" colspan="1">Código</td>
+                        <td class="cssencabezado" colspan="3">{{codigo}}</td>
+                    </tr>
+                    <tr>
+                        <td class="cssencabezado" colspan="5" rowspan="2">
+                            FORMATO SOLICITUD BIENES Y SERVICIOS CON CARGO A CONVENIOS DE CTeI – OTROS BIENES Y SERVICIOS
+                        </td>
+                        <td colspan="1" class="cssencabezado">Versión N°</td>
+                        <td colspan="3" class="cssencabezado">{{version}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" class="cssencabezado">Vigencia</td>
+                        <td colspan="3" class="cssencabezado">{{vigencia}}</td>
+                    </tr>
+                    </thead>
+                </table>
+
+                <table class="table table-pdf-form">
+                    <thead>
+                    <tr class="table-title">
+                        <td style="width: 100%" colspan="5">INFORMACIÓN GENERAL</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%">Administrador de los recursos:</td>
+                        <td style="width: 25%" colspan="2">{{adm_recursos}}</td>
+                        <td style="width: 25%">Convenio:</td>
+                        <td style="width: 25%">{{convenio}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%">Fecha de solicitud:</td>
+                        <td style="width: 25%">{{fecha_solicitud}}</td>
+                        <td style="width: 25%">Nombre Proyecto:</td>
+                        <td style="width: 25%" colspan="2">{{nombre_proyecto}}</td>
+                    </tr>
+                    </thead>
+                </table>
+
+                <table class="table table-pdf-form">
+                    <thead>
+                    <tr class="table-title">
+                        <td style="width: 100%" colspan="5">OTROS BIENES Y SERVICIOS</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100%" colspan="3">
+                            <div>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <td style="width: 20%"><label>Tipo de Requerimiento</label></td>
+                                        <td style="width: 20%"><label>Contratación Bienes</label></td>
+                                        <td style="width: 20%"><label> <b *ngIf=" tipo_requerimiento == 'bienes'"> X </b></label></td>
+                                        <td style="width: 20%"><label>Contratación Servicios</label></td>
+                                        <td style="width: 20%" colspan="4"><label> <b *ngIf="tipo_requerimiento == 'servicios'"> X </b></label></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ng-container>
+                                        <tr>
+                                            <td>
+                                                <label>Rubro:</label>
+                                            </td>
+                                            <td>
+                                                <b>{{tipo_rubro}}</b>
+                                            </td>
+                                            <td>
+                                                <label>Valor Financiado:</label>
+                                            </td>
+                                            <td>
+                                                <b>$ {{valor_financiado}}</b>
+                                            </td>
+                                            <td>
+                                                <label>Valor en Compromiso:</label>
+                                            </td>
+                                            <td>
+                                                <b>$ {{valor_compromiso}}</b>
+                                            </td>
+                                            <td>
+                                                <label>Valor Disponible:</label>
+                                            </td>
+                                            <td><b>$ {{valor_disponible}}</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 20%" colspan="2"><label>Valor estimado del Bien o Servicio:</label></td>
+                                            <td style="width: 20%" colspan="7"><label><b>${{valor_estimado}}</b></label></td>
+                                        </tr>
+                                    </ng-container>
+                                    <tr>
+                                        <td style="width: 20%"><label>Lugar de Entrega:</label></td>
+                                        <td style="width: 20%" colspan="4"><label>{{lugar_entrega}}</label></td>
+                                        <td style="width: 20%"><label>Fecha Requerida de Acta de Inicio:</label></td>
+                                        <td style="width: 20%" colspan="4"><label>{{fecharequerida_actainicio}}</label></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    </thead>
+                </table>
+
+                <table class="table table-pdf-form">
+                    <thead>
+                    <tr class="table-title">
+                        <td style="width: 100%" colspan="2">INFORMACIÓN CONTRACTUAL</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 10%">Objeto del Contrato:</td>
+                        <td style="width: 90%">{{objeto_contrato}}</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 10%">Condiciones de Contratación:</td>
+                        <td style="width: 90%">El valor aprobado incluye todos los gastos en que deba incurrir el contratista para el cumplimiento del objeto de la futura contratación, así como el pago de los impuestos, tasas, contribuciones y descuentos establecidos en las normas vigentes.</td>
+                    </tr>
+                    </thead>
+                </table>
+                <table class="table table-pdf-form">
+                    <thead>
+                    <tr class="table-title">
+                        <td style="width: 100%" colspan="2">FORMA DE PAGO</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 100%; text-align: center;" colspan="2">Se cancelará al <b>CONTRATISTA</b> el valor del contrato de la siguiente manera:</td>
+                    </tr>
+                    <tr>
+                        <td class="title-table-estructura" style="width: 70%"><b>Bien o Servicio a Adquirir</b></td>
+                        <td class="title-table-estructura" style="width: 30%"><b>Valor</b></td>
+                    </tr>
+                    <ng-container *ngFor="let rubro of observaciones_rubros">
+                        <tr>
+                            <td style="width: 50%">
+                                <b>{{rubro.nombre}}</b>
+                            </td>
+                            <td style="width: 50%"><b>${{rubro.valor*rubro.cantidad}}</b></td>
+                        </tr>
+                    </ng-container>
+                    <tr>
+                        <td class="title-table-estructura"><label>TOTAL</label></td>
+                        <td class="title-table-estructura"><label>$ {{valor_estimado}}</label>
+                    </tr>
+                    <tr>
+                        <td style="width: 100%" colspan="2">
+                            <b>OBLIGACIONES DEL CONTRATISTA</b><br>
+                            ● Ejecutar a cabalidad el objeto del contrato.
+                            <br>● Realizar la entrega de lo contratado, garantizando su calidad y resultado. Igualmente, realizar lo pertinente en caso de que se requiera algún tipo de corrección.
+                            <br>● Cumplir con la entrega de actividades según el plazo establecido.
+                            <br>● Firmar los acuerdos de confidencialidad de la información a que haya lugar.
+                            <br>● Firmar la documentación respectiva de cesión de derechos patrimoniales si hay lugar a ello.
+                            <br>● El CONTRATISTA se compromete a obtener legítimamente las licencias y derechos sobre cualquier elemento que entregue a la FAC.
+                            ● Las demás que se deriven de la naturaleza del Contrato
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 80%">Tiempo Requerido de Ejecución para el Contrato:</td>
+                        <td style="width: 20%"> {{tiempo_ejecucion}}</td>
+                    </tr>
+                    </thead>
+                </table>
+
+                <table class="table table-pdf-form">
+                    <thead>
+                        <tr class="table-title">
+                            <td style="width: 100%" colspan="5">FICHA TÉCNICA DEL BIEN O SERVICIO A CONTRATAR</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100%" colspan="5">
+                                Los bienes descritos a continuación deben cumplir con las observaciones establecidas para satisfacer las necesidades del proyecto “ Investigación científica y desarrollo tecnológico, desarrollo de nuevos productos y procesos, creación y apoyo a centros científicos y tecnológicos y conformación de redes de investigación e información (Numeral 1 del artículo 2 del Decreto 591 de 1991)-Rendimiento cognitivo, físico y sueño en misión análoga de aislamiento y confinamiento en el hábitat del Centro de Entrenamiento de Astronautas Análogos en Polonia (AATC)”
+                            </td>
+                        </tr>
+                        <td class="title-table-estructura" style="width: 25%"><b>Bien o Servicio a Adquirir</b></td>
+                        <td class="title-table-estructura" style="width: 25%"><b>Unidad de Medida</b></td>
+                        <td class="title-table-estructura" style="width: 25%"><b>Cantidad</b></td>
+                        <td class="title-table-estructura" style="width: 25%"><b>Observaciones</b></td>
+                        <tr *ngFor="let iterador of observaciones_rubros">
+                            <td style="width: 25%">{{iterador.nombre}}</td>
+                            <td style="width: 25%">{{iterador.unidad}}</td>
+                            <td style="width: 25%">{{iterador.cantidad}}</td>
+                            <td style="width: 25%">{{iterador.observacion}}</td>
+                        </tr>
+                    </thead>
+                </table>
+
+                <table class="table table-pdf-form">
+                    <thead>
+                        <tr class="table-title">
+                            <td style="width: 100%" colspan="5">INFORMACIÓN ADICIONAL RELEVANTE</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100%">{{info_adicional}}</td>
+                        </tr>
+                    </thead>
+                </table>
+
+                <table class="table table-pdf-form">
+                    <thead>
+                        <tr class="table-title">
+                            <td style="width: 100%" colspan="3">INFORMACIÓN DE POSIBL PROVEEDOR</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">Nombre Persona o Razón Social</td>
+                            <td style="width: 80%">{{info_prov_nombre}}<td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">Ciudad, Departamento</td>
+                            <td style="width: 80%">{{info_prov_ciudad}}<td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">Teléfonos de contacto</td>
+                            <td style="width: 80%">{{info_prov_numero}}<td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">Dirección</td>
+                            <td style="width: 80%">{{info_prov_direccion}}<td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">Correo electrónico</td>
+                            <td style="width: 80%">{{info_prov_correo}}<td>
+                        </tr>
+                    </thead>
+                </table>
+                <table class="table table-pdf-form">
+                    <thead>
+                        <tr class="table-title">
+                            <td style="width: 100%" colspan="2">AUTORIZACIONES</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 100%" colspan="2">Los abajo firmantes declaran bajo la gravedad de juramento que no se encuentran incursos en ninguna de las causales de conflicto de interés que se encuentran establecidas en la Constitución, en la Ley y en la reglamentación interna o estatutos de las entidades públicas, con los posibles proveedores de la presente solicitud de bienes y servicios.</td>
+                        </tr>
+
+                        <!-- <tr>
+                            <td style="width: 20%">Solicitó: Investigador Principal</td>
+                            <td class="title-table-estructura" style="width: 20%" colspan="2" class="firma-imagen-center">
+                                <img class="firma-imagen-pdf" *ngIf="this.firmaInvestigadorPrincipal"
+                                src="data:image/png;base64,{{this.firmaInvestigadorPrincipal.data}}" alt="Imagen de Firma Inv. principal">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width: 20%">Revisó: Jefe Centro I+D+i</td>
+                            <td class="title-table-estructura" style="width: 20%" colspan="2" class="firma-imagen-center">
+                                <img class="firma-imagen-pdf" *ngIf="this.firma_jefecentro"
+                                src="data:image/png;base64,{{this.firma_jefecentro.data}}" alt="Imagen de Firma Jefe de Centro de Inv.">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width: 20%">Revisó: Gestor de ACTI</td>
+                            <td class="title-table-estructura" style="width: 20%" colspan="2" class="firma-imagen-center">
+                                <img class="firma-imagen-pdf" *ngIf="this.firmaGestorActi_finalizar"
+                                src="data:image/png;base64,{{this.firmaGestorActi_finalizar.data}}" alt="Imagen de Firma gestor de ACTI">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width: 20%">Aprobó: Director DICTI</td>
+                            <td class="title-table-estructura" style="width: 20%" colspan="2" class="firma-imagen-center">
+                                <img class="firma-imagen-pdf" *ngIf="this.firmaComandante_finalizar"
+                                src="data:image/png;base64,{{this.firmaComandante_finalizar.data}}" alt="Imagen de Firma Director DICTI">
+                            </td>
+                        </tr> -->
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <mat-dialog-actions align="end">
+            <button (click)="downloadPDF()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Generar PDF</button>
+            <button mat-button mat-dialog-close (click)="closeModal()">Cerrar</button>
+        </mat-dialog-actions>
+    </div>
+</div>

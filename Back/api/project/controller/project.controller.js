@@ -109,6 +109,7 @@ function create(req, res, next) {
             let endDate2 = `${day2}-${month2 + 1 }-${year2}`;
 
             Proyecto.finalizado = false;
+            Proyecto.bienes_servicios = false;
 
             Proyecto.date2 = endDate2;
             Proyecto.date_fin = endDate;

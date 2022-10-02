@@ -12,13 +12,15 @@ export interface Proyect {
     date_inicio?: Date;
     date_fin?: Date;
     finalizado?: boolean;
+    bienes_servicios?: boolean;
     UserId?: string;
     Convocatoria?: string;
     objetivosEspecificos?: ObjetivoEspecifico[];
     ProyectoBloqueado?: boolean;
     Seguimiento?: boolean;
     Entidades?: Entidad[];
-    preguntasFinalizacion?: preguntasFinalizacionInterface[];
+    preguntasFinalizacion?: preguntasFinalizacionInterface[]; //PREGUNTAS FINALIZACION
+    //preguntasBienesyServicios?: preguntasBienesInterface[]; //PREGUNTAS BIENES
     EquipoInvestigaciones?: EquipoInvestigacion[];
     AgregarDetallesRubros?: AgregarDetallesRubros[];
     productosEsperados?: productosEsperados[];
@@ -72,6 +74,33 @@ export interface preguntasFinalizacionInterface {
     respuesta_preg_cinco?: string;
     firma_jefeCentro?: Boolean,
 }
+
+// export interface preguntasBienesInterface {
+//     adm_recursos?: string,
+//     convenio?: string,
+//     codigo?: string,
+//     version?: string,
+//     vigencia?: string,
+//     tipo_requerimiento?: string,
+//     valor_estimado?: number,
+//     objeto_contrato?: string,
+//     lugar_entrega?: string,
+//     fecharequerida_actainicio?: string,
+//     info_adicional?: string,
+//     info_prov_nombre?: string,
+//     info_prov_ciudad?: string,
+//     info_prov_direccion?: string,
+//     info_prov_numero?: string,
+//     info_prov_correo?: string,
+//     observaciones_rubros?: Observaciones_rubros[],
+// }
+
+// export interface Observaciones_rubros {
+//     nombre?: string;
+//     cantidad?: string;
+//     observacion?: string;
+//     unidad?: string,
+// }
 
 export interface informacion {
     impacto: string;

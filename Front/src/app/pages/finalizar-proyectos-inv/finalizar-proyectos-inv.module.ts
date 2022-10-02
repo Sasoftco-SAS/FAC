@@ -5,6 +5,7 @@ import { FinProyectosHomeComponent } from './finalizar_proyectos-home/finalizar_
 import { PagesModule } from '../pages.module';
 import { FinalizarPrTableComponent } from './finalizar_proyectos-table/finalizar_proyectos-table.component';
 import { VistaFinalizacionComponent, VistaFinalizacionData } from './vista-finalizacion/vista-finalizacion.component';
+import { VistaBienesComponent, VistaBienesData } from './vista-bienes/vista-bienes.component';
 
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTableModule} from '@angular/material/table';
@@ -35,7 +36,7 @@ import { MatSortModule } from '@angular/material/sort';
 
 
 @NgModule({
-  declarations: [FinProyectosHomeComponent, FinalizarPrTableComponent, VistaFinalizacionComponent],
+  declarations: [FinProyectosHomeComponent, FinalizarPrTableComponent, VistaFinalizacionComponent, VistaBienesComponent],
   imports: [
     CommonModule,
     FinProyectosRoutingModule,

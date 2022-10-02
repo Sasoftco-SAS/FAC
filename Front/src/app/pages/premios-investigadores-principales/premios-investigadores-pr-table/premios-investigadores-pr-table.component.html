@@ -1,0 +1,80 @@
+
+<!--INICIA ESPACIO PARA DEFINIR MODAL FINALIZAR PROYECTO JEFE CENTRO-->
+<ng-template #contenido let-modal>
+    <div class="modal-header">
+        <button class="close" aria-label="close" type="button" (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body container">
+        <form class="mt-3" [formGroup]="formPremiacion" (ngSubmit)="metodobasura()">
+
+            <div class="form-group child">
+                <h4>Tipo de premio</h4>
+                <mat-form-field>
+                  <select class="form-control form-control-lg" matNativeControl formControlName="premio" >
+                    <option value="Premio anual de ciencia y tecnologia">Premio anual de ciencia y tecnología</option>
+                    <option value="Medalla de ciencia y tecnologia">Medalla de ciencia y tecnología</option>
+                    <option value="Reconocimiento por terminacion de proyectos">Reconocimiento por terminación de proyectos</option>
+                  </select>
+                </mat-form-field>
+            </div>
+
+            <div class="form-group child">
+                <h4 style="text-align: center;">Describa el mérito de premiación</h4>
+                <!-- <input type="text" formControlName="respuesta_preg_cinco" class="form-control form-control-lg"> -->
+                <input type="text" formControlName="merito" class="form-control form-control-lg"  placeholder="...">
+            </div>
+
+            <div class="mb3" style="margin-top: 30px; text-align:center;">
+                <a
+                    (click)="metodoPremiar()"
+                    (click)="modal.close()">
+                    <button type="submit" class="btn btn-success btn-lg float-start">Aceptar</button>
+                <!--<button class="btn btn-secondary btn-lg float-end" routerLink="/">Cancelar</button> Redirecciona a '/'-->
+                </a>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="modal.close()">Cancelar</button>
+    </div>
+</ng-template>
+<!--MODAL TERMINADO-->
+
+<div class="text-center col-lg-12 col-md-12 col-xs-12 overflow-auto card-centros-listado__table-div">
+    <table #clasificar="matSort" mat-table [dataSource]="dataSource" matSort class="container-tabla mat-elevation-z8">
+
+        <ng-container matColumnDef="investigador">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Investigador</th>
+            <td mat-cell *matCellDef="let element"> {{element.Investigador.profile.names}} {{element.Investigador.profile.surname}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+            <th scope="col" mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let row">
+                <ul class="table-action-list table-acciones">
+                    <li>
+                        <!-- *ngIf="(this.sesion_user.role.name != 'Jefe De Centro')" -->
+                        <button
+                                mat-icon-button
+                                aria-label="Example icon-button with a heart icon"
+                                matTooltipClass="tooltip-white"
+                                matTooltip="Otorgar premio"
+                                (click)="modal.open(contenido)"
+                                (click)="openModalEncuesta(row)"
+                                matTooltipPosition="right"
+                        >
+                            <mat-icon>star_half</mat-icon>
+                        </button>
+                    </li>
+                </ul>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+    </table>
+    <div class="linea" *ngIf="hayInvestigadores == false"></div>
+    <b *ngIf="hayInvestigadores == false"><br>ACTUALMENTE NO HAY INVESTIGADORES POR MOSTRAR . . .</b>
+</div>

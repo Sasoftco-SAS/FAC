@@ -52,8 +52,8 @@
             <div class="form-group">
                 <h4>Determine las acciones a tomar en caso de que los costos para la ejecución del proyecto de investigación hayan sido superiores o inferiores a lo inicialmente planeado.</h4>
                 <!-- <input type="text" formControlName="respuesta_preg_cinco" class="form-control form-control-lg"> -->
-                <mat-form-field class="example-full-width" appearance="fill">
-                    <textarea formControlName="respuesta_preg_cinco" cols="40" rows="5" style="resize: both;" matInput placeholder="..."></textarea>
+                <mat-form-field class="example-full-width" appearance="fill" style="width: 700px;">
+                    <textarea formControlName="respuesta_preg_cinco" cols="100" rows="5" style="resize: both;" matInput placeholder="..."></textarea>
                 </mat-form-field>
             </div>
 
@@ -71,7 +71,241 @@
         <button type="button" class="btn btn-success" (click)="modal.close()">Cancelar</button>
     </div>
 </ng-template>
-<!--MODAL TERMINADO-->
+<!--MODAL PDF FINALIZACION TERMINADO-->
+
+
+<!--INICIA ESPACIO PARA DEFINIR MODAL BIENES Y SERVICIOS INVESTIGADOR-->
+<ng-template #contenidoBienes let-modal>
+
+    <div class="modal-header">
+        <button class="close" aria-label="close" type="button" (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <form class="mt-3" [formGroup]="formEncuestaBienes" (ngSubmit)="metodobasura()">
+            <h4 style="text-align: center;">Generar PDF de Bienes y Servicios</h4><br>
+
+            <div class="container form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4>Administrador de los recursos:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <!-- <input type="text" matNativeControl [class.is-invalid]="formEncuestaBienes.get('adm_recursos').touched && formEncuestaBienes.get('adm_recursos').invalid" formControlName="adm_recursos" class="form-control form-control-lg"> -->
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="adm_recursos" >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm">
+                        <h4>Convenio:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="convenio" >
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4>Código:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="codigo" >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm">
+                        <h4>Versión:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="version" >
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4>Vigencia:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="date" class="form-control form-control-lg" matNativeControl formControlName="vigencia">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm">
+                        <h4>Tipo de requerimiento:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <select class="form-control form-control-lg" matNativeControl formControlName="tipo_requerimiento" >
+                              <option value="bienes">Bienes</option>
+                              <option value="servicios">Servicios</option>
+                            </select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4>Objeto del contrato:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="objeto_contrato" >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm">
+                        <h4>Lugar de entrega:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="lugar_entrega" >
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="container form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4>Fecha Requerida de Acta de Inicio:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <!-- <input type="text" class="form-control form-control-lg" matNativeControl formControlName="fecharequerida_actainicio" > -->
+                            <input type="date" class="form-control form-control-lg" matNativeControl formControlName="fecharequerida_actainicio">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm">
+                        <h4>Información adicional relevante:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="info_adicional" >
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <!-- Info de Posibles proveedores -->
+            <h4 style="text-align: center;">Información de posibles proveedores</h4><br>
+
+            <div class="container form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4>Nombre Persona o Razón Social:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="info_prov_nombre" >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm">
+                        <h4>Ciudad o Departamento:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="info_prov_ciudad" >
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4>Número de contacto:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="info_prov_numero" >
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm">
+                        <h4>Correo electrónico:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="info_prov_correo" >
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container form-group">
+                <div class="row">
+                    <div class="col-sm">
+                        <h4>Tiempo requerido de ejecución para el contrato:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="date" class="form-control form-control-lg" matNativeControl formControlName="tiempo_ejecucion">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm">
+                        <h4>Dirección:</h4>
+                        <mat-form-field style="width: 500px;">
+                            <input type="text" class="form-control form-control-lg" matNativeControl formControlName="info_prov_direccion" >
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container form-group">
+                <!-- {{consola(proyecto_usar)}} -->
+                <!-- {{consola(rubros_proyecto)}} -->
+                <mat-form-field style="width: 1000px;">
+                    <h4>Tipo de Rubro:</h4>
+                    <select #tiporubro (change)="getInfoRubro(tiporubro.value)" form-control form-control-lg matNativeControl formControlName="tipo_rubro" >
+                        <option *ngFor="let rubroaux of rubros_proyecto" value="{{rubroaux}}">{{rubroaux}}</option>
+                    </select>
+                </mat-form-field>
+            </div>
+
+            <!-- {{consola(info_rubroSelected)}} -->
+            <!-- OTROS BIENES Y SERVICIOS -->
+            <div class="form-group">
+                <div formArrayName="observaciones_rubros">
+                    <h4 style="text-align: center;">Ficha técnica del Bien o Servicio a Adquirir</h4>
+                    <div *ngFor="let rubro of getObservaciones.controls; let i = index;" [formGroupName]="i">
+
+                        <mat-form-field style="width: 1000px;">
+                            <h4>Nombre del Bien o Servicio:</h4>
+                            <input class="form-control form-control-lg" matNativeControl formControlName="nombre"/>
+                        </mat-form-field>
+
+                        <mat-form-field style="width: 1000px;">
+                            <h4>Unidad de medida:</h4>
+                            <input class="form-control form-control-lg" matNativeControl formControlName="unidad"/>
+                        </mat-form-field>
+
+                        <mat-form-field style="width: 1000px;">
+                            <h4>Cantidad:</h4>
+                            <input type="number" class="form-control form-control-lg" matNativeControl formControlName="cantidad"/>
+                        </mat-form-field>
+
+                        <mat-form-field style="width: 1000px;">
+                            <h4>Observación:</h4>
+                            <input class="form-control form-control-lg" matNativeControl formControlName="observacion"/>
+                        </mat-form-field>
+
+                        <mat-form-field style="width: 1000px;">
+                            <h4>Valor:</h4>
+                            <input type="number" class="form-control form-control-lg" min="0" max="999999999" matNativeControl formControlName="valor"/>
+                        </mat-form-field>
+
+                        <a class="btn btn-link" (click)="removeObservacion(i)">Eliminar</a>
+
+                    </div>
+                    <button class="btn btn-link" (click)="addObservacion()">Añadir Bien/Servicio</button>
+                    <br>
+                </div>
+            </div>
+
+            <!-- CARGAR VALOR ESTIMADO Y DISPONIBLE -->
+            <h4 style="text-align: center;">Valor disponible</h4>
+            <p style="text-align: center;"><b>${{valor_disponible}}</b></p>
+            <h4 style="text-align: center;">Valor estimado</h4>
+            <p style="text-align: center;"><b>${{valor_estimado}}</b></p>
+
+            <mat-error class="mat-error" *ngIf="validarMonto()">El valor estimado supera el disponible</mat-error>
+
+            <br>
+
+            <div class="mb-3">
+                <a style="text-align: center;"
+                    (click)="metodoActualizarProyectoBienes()"
+                    (click)="modal.close()">
+                    <button type="submit" [disabled]="formEncuestaBienes.invalid" class="btn btn-success btn-lg float-start">Aceptar</button>
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="modal.close()">Cancelar</button>
+    </div>
+
+</ng-template>
+<!--MODAL PDF BIENES Y SERVICIOS TERMINADO-->
 
 <div class="text-center col-lg-12 col-md-12 col-xs-12 overflow-auto card-centros-listado__table-div">
     <table #clasificar="matSort" mat-table [dataSource]="dataSource" matSort class="container-tabla mat-elevation-z8">
@@ -96,7 +330,7 @@
                                 aria-label="Example icon-button with a heart icon"
                                 matTooltipClass="tooltip-white"
                                 matTooltip="Finalizar proyecto"
-                                (click)="modal.open(contenido)"
+                                (click)="modal.open(contenido, {size: 'lg'})"
                                 (click)="openModalEncuesta(row._id)"
                                 matTooltipPosition="right"
                         >
@@ -105,7 +339,21 @@
                     </li>
                     <li>
                         <button
-                                *ngIf="(this.sesion_user.role.name != 'Jefe De Centro')"
+                                *ngIf="(this.sesion_user.role.name == 'Investigador')&&(row.finalizado == true)"
+                                mat-icon-button
+                                aria-label="Example icon-button with a heart icon"
+                                matTooltipClass="tooltip-white"
+                                matTooltip="Generar PDF bienes y servicios"
+                                (click)="modal.open(contenidoBienes, {size: 'xl'})"
+                                (click)="openModalEncuestaBienes(row)"
+                                matTooltipPosition="right"
+                        >
+                            <mat-icon>paid</mat-icon>
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                                *ngIf="(this.sesion_user.role.name != 'Jefe De Centro')&&(row.finalizado != true)"
                                 mat-icon-button
                                 aria-label="Example icon-button with a heart icon"
                                 matTooltipClass="tooltip-white"
@@ -121,14 +369,26 @@
                         <button
                             *ngIf="(row.finalizado == true)"
                             matTooltipClass="tooltip-white"
-                            matTooltip="Ver PDF"
+                            matTooltip="Ver PDF finalización"
                             matTooltipPosition="above"
                             class="square-red-icon"
-                            (click)="viewPDF(row._id)"
+                            (click)="viewPDF(row._id, 'finalizar')"
                         >
                             <mat-icon>picture_as_pdf</mat-icon>
                         </button>
                     </li>
+                    <!-- <li>
+                        <button
+                            *ngIf="(row.finalizado == true)&&(row.bienes_servicios == true)"
+                            matTooltipClass="tooltip-white"
+                            matTooltip="Ver PDF bienes y servicios"
+                            matTooltipPosition="above"
+                            class="square-red-icon"
+                            (click)="viewPDF(row._id, 'bienes')"
+                        >
+                            <mat-icon>document_scanner</mat-icon>
+                        </button>
+                    </li> -->
                 </ul>
             </td>
         </ng-container>

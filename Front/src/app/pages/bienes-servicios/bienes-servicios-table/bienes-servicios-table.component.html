@@ -1,0 +1,85 @@
+<div class="text-center col-lg-12 col-md-12 col-xs-12 overflow-auto card-centros-listado__table-div">
+    <table #clasificar="matSort" mat-table [dataSource]="dataSource" matSort class="container-tabla mat-elevation-z8">
+        <ng-container matColumnDef="proyecto">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Proyecto</th>
+            <td mat-cell *matCellDef="let element"> {{element.iniciarProyecto[0].nombreProyecto}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+            <th scope="col" mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let row">
+                <ul class="table-action-list table-acciones">
+                    <li>
+                        <button
+                                mat-icon-button
+                                aria-label="Example icon-button with a heart icon"
+                                matTooltipClass="tooltip-white"
+                                matTooltip="Ver bienes y servicios"
+                                (click)="modal.open(bienes, {size: 'lg'})"
+                                (click)="openModalBienes(row)"
+                                matTooltipPosition="right"
+                        >
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+                    </li>
+                </ul>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+
+    </table>
+    <div class="linea" *ngIf="!hayProyectos"></div>
+    <b *ngIf="!hayProyectos"><br>ACTUALMENTE NO HAY PROYECTOS POR MOSTRAR . . .</b>
+</div>
+
+<!--INICIA ESPACIO PARA DEFINIR MODAL BIENES Y SERVICIOS INVESTIGADOR-->
+<ng-template #bienes let-modal>
+
+    <div class="modal-header">
+        <button class="close" aria-label="close" type="button" (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="text-center col-lg-12 col-md-12 col-xs-12 overflow-auto card-centros-listado__table-div">
+        <table #clasificar="matSort" mat-table [dataSource]="dataSourceBienes" matSort class="container-tabla mat-elevation-z8">
+
+            <ng-container matColumnDef="bien/servicio">
+                <th mat-header-cell mat-sort-header *matHeaderCellDef>Bien/Servicio</th>
+                <td mat-cell *matCellDef="let element"> {{element.adm_recursos}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+                <th scope="col" mat-header-cell *matHeaderCellDef>Acciones</th>
+                <td mat-cell *matCellDef="let row">
+                    <ul class="table-action-list table-acciones">
+                        <li>
+                            <button
+                                    mat-icon-button
+                                    aria-label="Example icon-button with a heart icon"
+                                    matTooltipClass="tooltip-white"
+                                    matTooltipPosition="right"
+                                    (click)="viewPDF(row._id)"
+                                    (click)="modal.close()"
+                            >
+                                <mat-icon>receipt_long</mat-icon>
+                            </button>
+                        </li>
+                    </ul>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsBienes"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsBienes;"></tr>
+
+        </table>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="modal.close()">Cancelar</button>
+    </div>
+
+</ng-template>
+<!--MODAL PDF BIENES Y SERVICIOS TERMINADO-->

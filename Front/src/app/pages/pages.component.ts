@@ -37,8 +37,10 @@ export class PagesComponent implements OnDestroy {
 
     public MENU_SUBDIR_ITEMS = [
         {name: 'Inicio', route: '/pages', icon: 'home', icon2: 'android'},
-        {name: 'Propiedad intelectual', route: 'propiedad-intelectual', icon: 'text_snippet', icon2: 'android'} //SUBDIRECTOR PROPIEDAD INT
-    ];;
+        {name: 'Propiedad intelectual', route: 'propiedad-intelectual', icon: 'text_snippet', icon2: 'android'}, //SUBDIRECTOR PROPIEDAD INT
+        {name: 'Premiar investigador', route: 'premios_investigadores_pr', icon: 'stars'},
+        {name: 'Premios otorgados', route: 'premios_otorgados', icon: 'local_activity'}
+    ];
 
     constructor(private authService: AuthService,
         private notificacionService: NotificacionService,
@@ -124,7 +126,9 @@ export class PagesComponent implements OnDestroy {
                             //console.log("j j j: ",j.nombreSub); Detecta subact. desprotegidas y de 0% a 75%
                             this.MENU_SUBDIR_ITEMS = [
                                 {name: 'Inicio', route: '/pages', icon: 'home', icon2: 'android'},
-                                {name: 'Propiedad intelectual', route: 'propiedad-intelectual', icon: 'text_snippet', icon2: 'announcement'}
+                                {name: 'Propiedad intelectual', route: 'propiedad-intelectual', icon: 'text_snippet', icon2: 'announcement'},
+                                {name: 'Premiar investigador', route: 'premios_investigadores_pr', icon: 'stars'},
+                                {name: 'Premios otorgados', route: 'premios_otorgados', icon: 'local_activity'} //Rutas subdirector
                             ];
                         }
                     }
@@ -147,24 +151,39 @@ export class PagesComponent implements OnDestroy {
                 if ((this.sesion_id.substring(8,32) == notif.usuario)||this.sesion_id.substring(24,48) == notif.usuario) {
                     //console.log(" SE CUMPLE LA CONDICION ");
                     //=========
-                    Swal.fire({
-                        title: '<b>Proyecto: </b>'+notif.detalle2,
-                        icon: 'info',
-                        html:
-                          '<b>Producto: </b>'+notif.detalle+'<br><br><b>Detalle: </b>'+notif.mensaje+'<br><br><b>Se ha PROTEGIDO la propiedad intelectual</b>',
-                        showConfirmButton: true,
-                        showCancelButton: true,
-                        confirmButtonText: "Aceptar",
-                        cancelButtonText: "Cerrar",
-                      }).then((result) => {
-                        if (result.value == true) {
-                            //console.log("resultZZZZZZZ");
-                            this.notificacionService.removeNotificacion(notif._id).subscribe();
-                        }
-                      })
+                    if(notif.tipo == "Bienes y Servicios"){
+                        Swal.fire({
+                            title: '<b>NOTIFICACIÓN: </b>'+notif.tipo,
+                            icon: 'info',
+                            html:
+                              '<b>Mensaje: </b>'+notif.detalle+'<br>',
+                            showConfirmButton: true,
+                            showCancelButton: true,
+                            confirmButtonText: "Aceptar",
+                            cancelButtonText: "Cerrar",
+                          }).then((result) => {
+                            if (result.value == true) {
+                                this.notificacionService.removeNotificacion(notif._id).subscribe();
+                            }
+                          })
+                    }else{
+                        Swal.fire({
+                            title: '<b>Proyecto: </b>'+notif.detalle2,
+                            icon: 'info',
+                            html:
+                              '<b>Producto: </b>'+notif.detalle+'<br><br><b>Detalle: </b>'+notif.mensaje+'<br><br><b>Se ha PROTEGIDO la propiedad intelectual</b>',
+                            showConfirmButton: true,
+                            showCancelButton: true,
+                            confirmButtonText: "Aceptar",
+                            cancelButtonText: "Cerrar",
+                          }).then((result) => {
+                            if (result.value == true) {
+                                //console.log("resultZZZZZZZ");
+                                this.notificacionService.removeNotificacion(notif._id).subscribe();
+                            }
+                          })
+                    }
 
-                      //this.notificacionService.removeNotificacion(notif._id).subscribe();//ELIMINAR NOTIFICACION DESPUES DE VISTA
-                    //=========
                 }
             }
         });
@@ -214,7 +233,7 @@ export class PagesComponent implements OnDestroy {
                                         //Jefe de Centro
                                         // console.log("Jefe: ",this.usuario_JefeDeCentro._id);
                                         // console.log("Logeado: ",this.sesion_user._id);
-                                        if((this.usuario_JefeDeCentro._id == this.sesion_user._id)){
+                                        if((this.usuario_JefeDeCentro._id == this.sesion_user._id)&&(pr.finalizado==false)){
                                             Swal.fire({
                                             title: '<b>¡NOTIFICACIÓN!</b>',
                                             icon: 'info',

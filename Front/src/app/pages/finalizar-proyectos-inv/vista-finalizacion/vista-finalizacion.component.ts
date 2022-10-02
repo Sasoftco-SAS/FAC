@@ -160,15 +160,6 @@ export class VistaFinalizacionComponent implements OnInit {
         }
     }
 
-    // for (let centro of this.centrosDeInv) {
-    //     if(centro.name == proyecto.iniciarProyecto[0].centroDeInvestigacion){
-    //         this.userService.getById(centro.jefe._id).subscribe((user)=>{
-    //             this.usuario_JefeDeCentro = user;
-    //             console.log(this.usuario_JefeDeCentro);
-    //         });
-    //     }
-    // }
-
     public getAll(): void {
         let date_hoy2 = new Date();
         let year2 = date_hoy2.getFullYear();

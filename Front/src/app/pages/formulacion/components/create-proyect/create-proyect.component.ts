@@ -5,7 +5,7 @@ import {
     informacion,
     EquipoInvestigacion,
     iniciarProyecto,
-    bibliografia, FirmasInterface, preguntasFinalizacionInterface
+    bibliografia, FirmasInterface, preguntasFinalizacionInterface, /*preguntasBienesInterface*/
 } from '../../../../shared/models/project.model';
 import {ProjectService} from '../../../../shared/services/Proyect/project.service';
 import {AuthStorageService} from '../../../../@core/services/storage/auth-storage/auth-storage.service';
@@ -50,6 +50,8 @@ export class CreateProyectComponent implements OnInit {
     public firmas: FirmasInterface[];
     public firmas_finalizar: FirmasInterface[];
     public preguntasFinalizacion: preguntasFinalizacionInterface[];
+    //public preguntasBienesyServicios: preguntasBienesInterface[];
+
 
 
     private state: StateInterface;
@@ -105,7 +107,7 @@ export class CreateProyectComponent implements OnInit {
             ValorTotal: 0,
             firmas: this.createFirmasInterface(UserId, this.getInvestigadorId(), primerPaso.comandante, primerPaso.gestorId),
             firmas_finalizar: this.createFirmasInterface(UserId, this.getInvestigadorId(), primerPaso.comandante, primerPaso.gestorId),
-            preguntasFinalizacion: this.createRespuestasInterface(),
+            preguntasFinalizacion: this.createRespuestasInterface(), // PREGUNTAS FINALIZACION
             planteamiento: cuartoPaso.planteamiento,
             riesgos: cuartoPaso.riesgos
         };
@@ -300,6 +302,30 @@ export class CreateProyectComponent implements OnInit {
             },
         ];
     }
+
+    // createRespuestasBienes(): preguntasBienesInterface[] {
+    //     return [
+    //         {
+    //             adm_recursos: 'N/A',
+    //             convenio: 'N/A',
+    //             codigo: 'N/A',
+    //             version: 'N/A',
+    //             vigencia: 'N/A',
+    //             tipo_requerimiento: 'N/A',
+    //             valor_estimado: 0,
+    //             lugar_entrega: 'N/A',
+    //             objeto_contrato: 'N/A',
+    //             fecharequerida_actainicio: 'N/A',
+    //             info_adicional: 'N/A',
+    //             info_prov_nombre: 'N/A',
+    //             info_prov_ciudad: 'N/A',
+    //             info_prov_direccion: 'N/A',
+    //             info_prov_numero: 'N/A',
+    //             info_prov_correo: 'N/A',
+    //             observaciones_rubros: [{nombre: 'N/A', cantidad: 'N/A', observacion: 'N/A', unidad: 'N/A'}],
+    //         },
+    //     ];
+    // }
 
     private getInvestigadorId(): string {
         return this.state.segundoPaso.equipoDeInvestigacion

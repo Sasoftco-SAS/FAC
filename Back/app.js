@@ -34,6 +34,9 @@ const necesidadRoutes = require("./api/necesidad/routes/necesidad.routes");
 const propiedadintRoutes = require("./api/propiedad-intelectual/routes/propiedadint.routes"); //Propiedadintelectual
 const notificacionRoutes = require("./api/notificacion/routes/notificacion.routes"); //NOTIFICACIONES
 const finalizarprRoutes = require ("./api/finalizar-proyecto/routes/finalizar-proyecto.routes"); //FinalizaPr Routes
+const premiosInvestigadoresRoutes = require ("./api/premios-investigadores/routes/premios-investigadores.routes"); //Premios al inv. Routes
+const premiosOtorgados = require("./api/premios-otorgados/routes/premios-otorgados.routes"); //premios otorgados a los investigadores
+const bienes = require ('./api/bienes-servicios/routes/bienes-servicios.routes')
 const mongoose = require("mongoose");
 
 const app = express();
@@ -112,6 +115,9 @@ app.use(apiBaseUrl, necesidadRoutes);
 app.use(apiBaseUrl, propiedadintRoutes); //PROPIEDAD INTELECTUAL
 app.use(apiBaseUrl, notificacionRoutes); //NOTIFICACIONES
 app.use(apiBaseUrl, finalizarprRoutes); //Finalizar Proyectos
+app.use(apiBaseUrl, premiosInvestigadoresRoutes); //premios al inv.
+app.use(apiBaseUrl, premiosOtorgados); //Premios otorgados a los investigadores
+app.use(apiBaseUrl, bienes); //BienesyServiciosPDFs
 app.use(apiBaseUrl, invProgramRoutes);
 app.use(apiBaseUrl, invLineRoutes);
 app.use(apiBaseUrl, invSubProgramRoutes);

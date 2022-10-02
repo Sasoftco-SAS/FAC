@@ -73,7 +73,7 @@ const ProyectoDao = require('../../project/dao/project.dao');
 }
 
 /**
- * Método para eliminar unidad
+ * Método para eliminar
  * @param req
  * @param res
  * @param next

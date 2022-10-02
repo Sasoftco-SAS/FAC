@@ -99,6 +99,21 @@ const routes: Routes = [
                 canActivate: [AuthGuardService]
             },
             {
+                path: 'premios_investigadores_pr',//Finalizar proyectos route
+                loadChildren: () => import('./premios-investigadores-principales/premios-investigadores-pr.module').then(m => m.PremiosInvestigadoresPrModule),
+                canActivate: [AuthGuardService]
+            },
+            {
+                path: 'premios_otorgados',//Finalizar proyectos route
+                loadChildren: () => import('./premios-otorgados/premios-otorgados.module').then(m => m.PremiosOtorgadosModule),
+                canActivate: [AuthGuardService]
+            },
+            {
+                path: 'bienes-servicios',//Bienes y Servicios route
+                loadChildren: () => import('./bienes-servicios/bienes-servicios.module').then(m => m.BienesServiciosModule),
+                canActivate: [AuthGuardService]
+            },
+            {
                 path: '**',
                 redirectTo: '',
                 pathMatch: 'full',

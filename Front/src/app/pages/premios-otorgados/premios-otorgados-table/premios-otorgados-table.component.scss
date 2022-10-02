@@ -1,0 +1,49 @@
+
+.container-tabla {
+    margin-left: auto; //centrar tabla
+    margin-right: auto; //centrar tabla
+    text-align:center;
+}
+
+.linea {
+    border-top: 1px solid black;
+    height: 2px;
+    padding: 0;
+    margin: 20px auto 0 auto;
+  }
+
+.container-tabla th{
+    text-align:center;
+}
+
+textarea { width: 00px; height: 150px; }
+
+.modal-body h4, mat-label {
+    color: #004884;
+    font-weight: 700;
+    letter-spacing: normal;
+    font-family: "Work Sans", sans-serif;
+    font-size: 24px;
+}
+
+td > ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+ul {
+    list-style-type: none;
+}
+
+
+.child {
+    margin: 0 auto;
+    text-align:center;
+}
+
+.container {
+    margin: 25px;
+    width: 400px;
+    height: 370px;
+}
